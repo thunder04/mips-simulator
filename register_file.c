@@ -1,10 +1,11 @@
 #include "register_file.h"
 
 // Register File
-static int REG[32] = {0};
+static unsigned int REG[32] = {0};
 
-struct RegOut reg(int ReadRegister1, int ReadRegister2, int WriteRegister,
-                  int WriteData, int RegWrite) {
+struct RegOut reg(unsigned int ReadRegister1, unsigned int ReadRegister2,
+                  unsigned int WriteRegister, unsigned int WriteData,
+                  unsigned int RegWrite) {
   struct RegOut regOut = {0, 0};
 
   if (RegWrite) {

@@ -1,27 +1,38 @@
-enum IorD {
+enum IorDSel {
   IorD_PC,
   IorD_C,
 };
 
-enum MemToReg {
+enum MemToRegSel {
   MemToReg_C,
   MemToReg_DR,
 };
 
-enum ALUSrcA {
+enum RegDstSel {
+  RegDst_Rt,
+  RegDst_Rd,
+};
+
+enum ALUSrcASel {
   ALUSrcA_PC,
   ALUSrcA_A,
 };
 
-enum ALUSrcB {
+enum ALUSrcBSel {
   ALUSrcB_B,
   ALUSrcB_4,
   ALUSrcB_SignExtend,
   ALUSrcB_SignExtendSll2,
 };
 
-enum ALUOp {
+enum ALUOpSel {
   ALUOp_Add,
   ALUOp_Sub,
   ALUOp_Funct,
+};
+
+enum PCSrcSel {
+  PCSrc_ALUOut,
+  PCSrc_C,
+  PCSrc_IRAddr,
 };
