@@ -1,5 +1,5 @@
 #include "arithmetic_and_logic_shift_unit.h"
-#include "macros.h"
+#include "../macros.h"
 
 unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOp op) {
   switch (op) {

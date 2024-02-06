@@ -1,15 +1,16 @@
 // Multi-cycle MIPS Processor Simulator
 
-#include "arithmetic_and_logic_unit.h"
 #include "macros.h"
-#include "memory.h"
 #include "multiplexers.h"
-#include "register_file.h"
 #include "special_function_registers.h"
+#include "units/arithmetic_and_logic_shift_unit.h"
+#include "units/arithmetic_and_logic_unit.h"
+#include "units/register_file.h"
+#include "units/memory.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 
 // Instruction Counter and μPC
 static unsigned int IC = 0, microPC = 0;
