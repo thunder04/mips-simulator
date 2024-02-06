@@ -36,3 +36,10 @@ enum PCSrcSel {
   PCSrc_C,
   PCSrc_IRAddr,
 };
+
+unsigned int IorD(enum IorDSel sel);
+unsigned int RegDst(enum RegDstSel sel);
+unsigned int MemToReg(enum MemToRegSel sel);
+unsigned int ALUSrcA(enum ALUSrcASel sel);
+unsigned int ALUSrcB(enum ALUSrcBSel sel);
+unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut);
