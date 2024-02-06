@@ -21,7 +21,7 @@ enum ALUSrcB {
 };
 
 enum ALUOp {
-  ALUOp_Funct,
   ALUOp_Add,
   ALUOp_Sub,
+  ALUOp_Funct,
 };
