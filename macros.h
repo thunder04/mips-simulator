@@ -1,3 +1,5 @@
+// General macros and global constants go here.
+
 // A helper macro to create a mask of n bits. For example: n = 5 => 0b11111
 #define MASK(n) ((1 << (n)) - 1)
 

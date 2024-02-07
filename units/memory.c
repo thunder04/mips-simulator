@@ -18,6 +18,11 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
     }
   }
 
+  if (Address > MEM_SIZE) {
+    printf("Address exceeds memory.\n");
+    exit(1);
+  }
+
   if (MemWrite) {
     MEM[Address] = WriteData;
   } else if (MemRead) {
