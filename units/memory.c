@@ -2,9 +2,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-// 5MB of Memory
-#define MEMSIZE 1024 * 1024 * 5
-
 static unsigned int *MEM = NULL;
 
 MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
@@ -13,7 +10,7 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   // 5MB stack allocation. On Linux, where I am creating this, it's
   // configurable.
   if (MEM == NULL) {
-    MEM = (unsigned int *)malloc(sizeof(unsigned int) * MEMSIZE);
+    MEM = (unsigned int *)malloc(sizeof(unsigned int) * MEM_SIZE);
 
     if (MEM == NULL) {
       perror("Allocation failure");
