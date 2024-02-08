@@ -11,7 +11,7 @@
 const struct MicrocodeRow MICROCODE[] = {
   // 0 - fetch:
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_4, .mem = mMCread_pc, .pc = mPWCalu_out },
-  { .sequencing = { mSKdisp }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_SignExtend, .rf = mRCread },
+  { .sequencing = { mSKdisp }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_SignExtend, .rf = mRCread_rs_rt },
   // 2 - break:
   { .sequencing = { mSKlabel, 0 }, .exit = mECexit },
   // 3 - add:
@@ -59,6 +59,20 @@ const struct MicrocodeRow MICROCODE[] = {
   // 31 - ror:
   { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  // 33 - beq
+  { .sequencing = { mSKlabel, 0 }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B, .pc = mPWCc_cond },
+  // 34 - bne
+  { .sequencing = { mSKlabel, 0 }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B, .pc = mPWCc_not_cond },
+  // 35 - j
+  { .sequencing = { mSKlabel, 0 }, .pc = mPWCjump_address },
+  // 36 - jr
+  { .sequencing = { mSKlabel, 0 }, .pc = mPWCa },
+  // 37 - jal
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_4 },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_c, .pc = mPWCjump_address },
+  // 39 - jalr
+  { .sequencing = { mSKseq }, .rf = mRCread_rs_rd },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_a, .pc = mPWCb },
 };
 // clang-format on
 
@@ -81,14 +95,14 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     27, // INSTRUCTION: srl
     29, // INSTRUCTION: sra
     31, // INSTRUCTION: ror
-    -1, // INSTRUCTION: beq
-    -1, // INSTRUCTION: bne
+    33, // INSTRUCTION: beq
+    34, // INSTRUCTION: bne
     -1, // NOTHING
     2,  // INSTRUCTION: break
-    -1, // INSTRUCTION: j
-    -1, // INSTRUCTION: jr
-    -1, // INSTRUCTION: jal
-    -1, // INSTRUCTION: jalr
+    35, // INSTRUCTION: j
+    36, // INSTRUCTION: jr
+    37, // INSTRUCTION: jal
+    39, // INSTRUCTION: jalr
     -1, // INSTRUCTION: slladd
     -1, // INSTRUCTION: srladd
     -1, // INSTRUCTION: sraadd

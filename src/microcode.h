@@ -10,10 +10,54 @@
 enum mSequencingKind { mSKseq, mSKdisp, mSKlabel };
 enum mAluControl { mACnothing, mACadd, mACsub, mACand, mACor };
 enum mAlSuControl { mASCnothing, mASCsll, mASCsrl, mASCsra, mASCror };
-enum mRfControl { mRCnothing, mRCread, mRCwrite_c, mRCwrite_d, mRCwrite_dr };
-enum mMemControl { mMCnothing, mMCread_pc, mMCread_c, mMCwrite_c };
-enum mPcWriteControl { mPWCnothing, mPWCalu_out, mPWCc_cond, mPWCjump_address };
 enum mExitControl { mECcontinue, mECexit };
+
+enum mMemControl {
+  // Do nothing
+  mMCnothing,
+  // Read the address PC, and save the result to IR and DR
+  mMCread_pc,
+  // Read the address C, and save the result to DR
+  mMCread_c,
+  // Write the contents of B to the address C
+  mMCwrite_c,
+};
+
+enum mRfControl {
+  // Do nothing
+  mRCnothing,
+  // Read the rs and rt fields of IR and save them to A and B, respectively
+  mRCread_rs_rt,
+  // Read the rs and rd fields of IR and save them to A and B, respectively
+  mRCread_rs_rd,
+  // Write to rd the contents of C
+  mRCwrite_c,
+  // Write to rd the contents of D
+  mRCwrite_d,
+  // Write to rt the contents of DR
+  mRCwrite_dr,
+  // Write to ra the contents of C
+  mRCwrite_ra_c,
+  // Write to ra the contents of A (rs)
+  mRCwrite_ra_a,
+};
+
+enum mPcWriteControl {
+  // Do nothing (PCWrite & PCWriteCond signals is disabled)
+  mPWCnothing,
+  // Write to PC the result of ALU
+  mPWCalu_out,
+  // Write to PC if C is zero
+  mPWCc_cond,
+  // Write to PC the jump address
+  mPWCjump_address,
+  // Write to PC if C is NOT zero
+  mPWCc_not_cond,
+  // Write to PC the contents of A
+  mPWCa,
+  // Write to PC the contents of B
+  mPWCb,
+};
 
 struct mSequencing {
   enum mSequencingKind kind;
