@@ -10,9 +10,10 @@
 enum mSequencingKind { mSKseq, mSKdisp, mSKlabel };
 enum mAluControl { mACnothing, mACadd, mACsub, mACfunct };
 enum mAlSuControl { mASCnothing, mASCsll, mASCsrl, mASCsra, mASCror };
-enum mRfControl { mRfnothing, mRfread, mRfwrite_c, mRfwrite_dr };
+enum mRfControl { mRCnothing, mRCread, mRCwrite_c, mRCwrite_dr };
 enum mMemControl { mMCnothing, mMCread_pc, mMCread_c, mMCwrite_c };
-enum mPcWriteControl { mPWCnothing, mPWCc, mPWCc_cond, mPWCjump_address };
+enum mPcWriteControl { mPWCnothing, mPWCalu_out, mPWCc_cond, mPWCjump_address };
+enum mExitControl { mECcontinue, mECexit };
 
 struct mSequencing {
   enum mSequencingKind kind;
@@ -24,14 +25,19 @@ struct MicrocodeRow {
   struct mSequencing sequencing;
 
   enum mAluControl alu;
-  ALUSrcASel alu1;
-  ALUSrcBSel alu2;
+  enum ALUSrcASel alu1;
+  enum ALUSrcBSel alu2;
 
   enum mAlSuControl alsu;
-  ALSUSrcASel alsu1;
-  ALSUSrcBSel alsu2;
+  enum ALSUSrcASel alsu1;
+  enum ALSUSrcBSel alsu2;
 
   enum mRfControl rf;
   enum mMemControl mem;
   enum mPcWriteControl pc;
+
+  // Special operation that will exit the simulation, if enabled
+  enum mExitControl exit;
 };
+
+int opcode_to_microcode_idx(int opcode);
