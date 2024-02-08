@@ -8,9 +8,9 @@
 //   - The name of a variant (excl. the prefix) is in snake_case
 // The default behavior is the first enum variant
 enum mSequencingKind { mSKseq, mSKdisp, mSKlabel };
-enum mAluControl { mACnothing, mACadd, mACsub, mACfunct };
+enum mAluControl { mACnothing, mACadd, mACsub, mACand, mACor };
 enum mAlSuControl { mASCnothing, mASCsll, mASCsrl, mASCsra, mASCror };
-enum mRfControl { mRCnothing, mRCread, mRCwrite_c, mRCwrite_dr };
+enum mRfControl { mRCnothing, mRCread, mRCwrite_c, mRCwrite_d, mRCwrite_dr };
 enum mMemControl { mMCnothing, mMCread_pc, mMCread_c, mMCwrite_c };
 enum mPcWriteControl { mPWCnothing, mPWCalu_out, mPWCc_cond, mPWCjump_address };
 enum mExitControl { mECcontinue, mECexit };
