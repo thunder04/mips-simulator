@@ -12,7 +12,7 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   // configurable.
   if (MEM == NULL) {
 #ifdef DEBUG
-    printf("[DEBUG] Allocating %ld bytes of memory\n",
+    printf(ANSI_FM "[DEBUG] Allocating %ld bytes of memory\n" ANSI_0,
            sizeof(unsigned int) * MEM_SIZE);
 #endif
 
@@ -31,13 +31,13 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
 
   if (MemWrite) {
 #ifdef DEBUG
-    printf("[DEBUG] W MEM[%u] <== %u\n", Address, WriteData);
+    printf(ANSI_FM "[DEBUG] W MEM[%u] <== %u\n" ANSI_0, Address, WriteData);
 #endif
 
     MEM[Address] = WriteData;
   } else if (MemRead) {
 #ifdef DEBUG
-    printf("[DEBUG] R MEM[%u] ==> %u\n", Address, MEM[Address]);
+    printf(ANSI_FM "[DEBUG] R MEM[%u] ==> %u\n" ANSI_0, Address, MEM[Address]);
 #endif
 
     return MEM[Address];

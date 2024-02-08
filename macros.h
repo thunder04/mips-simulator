@@ -3,6 +3,13 @@
 // Comment out the next line to disable DEBUG messages
 #define DEBUG
 
+// Used to print to stdout/stderr with colors
+#define ANSI_FR "\x1b[31m"
+#define ANSI_FG "\x1b[32m"
+#define ANSI_FC "\x1b[36m"
+#define ANSI_FM "\x1b[35m"
+#define ANSI_0 "\x1b[0m"
+
 // A helper macro to create a mask of n bits. For example: n = 5 => 0b11111
 #define MASK(n) ((1 << (n)) - 1)
 
