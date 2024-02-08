@@ -32,7 +32,7 @@ enum ALSUSrcASel {
 
 enum ALSUSrcBSel {
   ALSUSrcB_B,
-  ALSUSrcB_SignExtend,
+  ALSUSrcB_Shamt,
 };
 
 enum ALUOpSel {

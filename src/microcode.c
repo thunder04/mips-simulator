@@ -48,16 +48,16 @@ const struct MicrocodeRow MICROCODE[] = {
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
   // 25 - sll:
-  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
   // 27 - srl:
-  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
   // 29 - sra:
-  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
   // 31 - ror:
-  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
 };
 // clang-format on

@@ -67,8 +67,8 @@ unsigned int ALSUSrcB(enum ALSUSrcBSel sel) {
   switch (sel) {
   case ALSUSrcB_B:
     return B;
-  case ALSUSrcB_SignExtend:
-    return IMM_SIGN_EXTEND(IR_imm());
+  case ALSUSrcB_Shamt:
+    return IR_shamt();
   default:
     return 0;
   }
