@@ -1,5 +1,8 @@
 // General macros and global constants go here.
 
+// Comment out the next line to disable DEBUG messages
+#define DEBUG
+
 // A helper macro to create a mask of n bits. For example: n = 5 => 0b11111
 #define MASK(n) ((1 << (n)) - 1)
 

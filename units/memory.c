@@ -1,6 +1,7 @@
 #include "memory.h"
-#include "stdio.h"
-#include "stdlib.h"
+#include "../macros.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static unsigned int *MEM = NULL;
 
@@ -10,6 +11,11 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   // 5MB stack allocation. On Linux, where I am creating this, it's
   // configurable.
   if (MEM == NULL) {
+#ifdef DEBUG
+    printf("[DEBUG] Allocating %ld bytes of memory\n",
+           sizeof(unsigned int) * MEM_SIZE);
+#endif
+
     MEM = (unsigned int *)malloc(sizeof(unsigned int) * MEM_SIZE);
 
     if (MEM == NULL) {
@@ -24,8 +30,16 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   }
 
   if (MemWrite) {
+#ifdef DEBUG
+    printf("[DEBUG] W MEM[%u] <== %u\n", Address, WriteData);
+#endif
+
     MEM[Address] = WriteData;
   } else if (MemRead) {
+#ifdef DEBUG
+    printf("[DEBUG] R MEM[%u] ==> %u\n", Address, MEM[Address]);
+#endif
+
     return MEM[Address];
   }
 

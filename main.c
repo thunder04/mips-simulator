@@ -35,7 +35,12 @@ int main(int argc, char *argv[]) {
     return 2;
   }
 
+  // Parse and close the file as it's not needed anymore
+  parse_file(fptr);
   fclose(fptr);
+
+  printf("%d\n", mem(PC, 1, 0, 0));
+
   return 0;
 }
 
@@ -50,11 +55,11 @@ void parse_file(FILE *fptr) {
     exit(4);
   }
 
-  char buf[LINE_LIMIT];
-  int addr = 0;
-
   // Initialize PC from the end of reserved space, according to the textbook.
   PC = MEM_RESERVED_SPACE;
+
+  char buf[LINE_LIMIT];
+  unsigned int addr = PC;
 
   while (fgets(buf, LINE_LIMIT, fptr)) {
     mem(addr, 0, 1, (unsigned int)strtol(buf, NULL, 2));
