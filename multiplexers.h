@@ -25,6 +25,16 @@ enum ALUSrcBSel {
   ALUSrcB_SignExtendSll2,
 };
 
+// TODO Is this really needed?
+enum ALSUSrcASel {
+  ALSUSrcA_A,
+};
+
+enum ALSUSrcBSel {
+  ALSUSrcB_B,
+  ALSUSrcB_SignExtend,
+};
+
 enum ALUOpSel {
   ALUOp_Add,
   ALUOp_Sub,

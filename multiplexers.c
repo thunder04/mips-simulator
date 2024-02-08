@@ -63,6 +63,17 @@ unsigned int ALUSrcB(enum ALUSrcBSel sel) {
   }
 }
 
+unsigned int ALSUSrcB(enum ALSUSrcBSel sel) {
+  switch (sel) {
+  case ALSUSrcB_B:
+    return B;
+  case ALSUSrcB_SignExtend:
+    return IMM_SIGN_EXTEND(IR_imm());
+  default:
+    return 0;
+  }
+}
+
 unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut) {
   switch (sel) {
   case PCSrc_ALUOut:
