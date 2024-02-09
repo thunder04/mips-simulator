@@ -31,10 +31,14 @@ int main(int argc, char *argv[]) {
   parse_file(fptr);
   fclose(fptr);
 
+  printf("\n=== Starting simulation ===\n");
+
   // Run the Control unit, which, for simplicity reasons, will also use (call)
   // the rest of the units. Something like running an event loop
   control();
 
+  printf("\n=== Ending simulation ===\n");
+  
   return 0;
 }
 

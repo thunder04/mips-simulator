@@ -64,7 +64,7 @@ void control() {
     handle_sequencing_column(&microIns);
 
     // Call the units
-    
+
     MemData MemOut = microIns.mem != mMCnothing
                          ? mem(IorD(IorDSel), MemRead, MemWrite, B)
                          : 0;
@@ -116,8 +116,8 @@ void control() {
     C = ALUOut.Out;
     D = ALSUOut;
 
+    // Exit simulation if we received the break instruction
     if (microIns.exit == mECexit) {
-      printf(ANSI_FM "Exiting simulation\n" ANSI_0);
       break;
     }
   }
@@ -135,6 +135,20 @@ void handle_sequencing_column(struct MicrocodeRow *microIns) {
     microPC = opcode_to_microcode_idx(IR_opcode());
     // Here it seems a good place to increment the Instruction Counter
     IC += 1;
+
+#ifdef DEBUG
+    printf(ANSI_FM "[DEBUG] About to process instruction: " ANSI_FR);
+
+    // Print the instruction in bits
+    for (int b = 0, l = sizeof(unsigned int) * 8; b < l; ++b) {
+      printf("%i", (IR >> (l - b - 1)) & 0x01);
+
+      if (b > 0 && b % 5 == 0 && b < 30) printf(" ");
+    }
+
+    printf("\n" ANSI_0);
+#endif
+
     break;
   }
 }
