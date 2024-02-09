@@ -39,8 +39,6 @@ int main(int argc, char *argv[]) {
   parse_file(fptr);
   fclose(fptr);
 
-  printf("%d\n", mem(PC, 1, 0, 0));
-
   return 0;
 }
 
@@ -62,7 +60,18 @@ void parse_file(FILE *fptr) {
   unsigned int addr = PC;
 
   while (fgets(buf, LINE_LIMIT, fptr)) {
-    mem(addr, 0, 1, (unsigned int)strtol(buf, NULL, 2));
+    char *endptr;
+    unsigned int word = (unsigned int)strtol(buf, &endptr, 2);
+
+    if (*endptr != '\0' && *endptr != '\n' && *endptr != '\r') {
+#ifdef DEBUG
+      printf(ANSI_FM "[DEBUG] Skipping line \"%s\"\n" ANSI_0, buf);
+#endif
+      
+      continue;
+    }
+
+    mem(addr, 0, 1, word);
     addr += 4;
   }
 }
