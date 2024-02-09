@@ -1,6 +1,6 @@
 #include "arithmetic_and_logic_unit.h"
 
-struct ALUOut alu(unsigned int a, unsigned int b, enum ALUOpSel op) {
+struct ALUOut alu(unsigned int a, unsigned int b, enum ALUOp op) {
   struct ALUOut out = {.Zero = 1, .Out = 0};
 
   switch (op) {

@@ -1,7 +1,7 @@
 #include "arithmetic_and_logic_shift_unit.h"
 #include "../macros.h"
 
-unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOpSel op) {
+unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOp op) {
   switch (op) {
   case ALSUOp_Sll:
     return num << amount;

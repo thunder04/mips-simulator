@@ -19,6 +19,8 @@ unsigned int RegDst(enum RegDstSel sel) {
     return IR_rd();
   case RegDst_Rt:
     return IR_rt();
+  case RegDst_Ra:
+    return 31;
   default:
     return 0;
   }
@@ -26,8 +28,12 @@ unsigned int RegDst(enum RegDstSel sel) {
 
 unsigned int MemToReg(enum MemToRegSel sel) {
   switch (sel) {
+  case MemToReg_A:
+    return A;
   case MemToReg_C:
     return C;
+  case MemToReg_D:
+    return D;
   case MemToReg_DR:
     return DR;
   default:
@@ -56,6 +62,15 @@ unsigned int ALUSrcB(enum ALUSrcBSel sel) {
     return IMM_SIGN_EXTEND(IR_imm());
   case ALUSrcB_SignExtendSll2:
     return IMM_SIGN_EXTEND(IR_imm()) << 2;
+  default:
+    return 0;
+  }
+}
+
+unsigned int ALSUSrcA(enum ALSUSrcASel sel) {
+  switch (sel) {
+  case ALSUSrcA_A:
+    return A;
   default:
     return 0;
   }
