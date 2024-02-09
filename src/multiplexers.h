@@ -46,6 +46,8 @@ enum ALSUSrcBSel {
 
 enum PCSrcSel {
   PCSrc_ALUOut,
+  PCSrc_A,
+  PCSrc_B,
   PCSrc_C,
   PCSrc_IRAddr,
 };

@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 const struct RegOut EMPTY_REG_RETURN = {0, 0};
-const struct ALUOut EMPTY_ALU_RETURN = {0, 0}; // Setting Zero=1 is intentional
+const struct ALUOut EMPTY_ALU_RETURN = {1, 0};
 
 // Instruction Counter and μPC
 unsigned int IC = 0, microPC = 0;
@@ -63,8 +63,8 @@ void control() {
     // Handle the sequencing column
     handle_sequencing_column(&microIns);
 
-    // Call the units and assign their return values to the respective variables
-    // and registers
+    // Call the units
+    
     MemData MemOut = microIns.mem != mMCnothing
                          ? mem(IorD(IorDSel), MemRead, MemWrite, B)
                          : 0;
@@ -85,11 +85,36 @@ void control() {
             ? alsu(ALSUSrcA(microIns.alsu1), ALSUSrcB(microIns.alsu2), ALSUOp)
             : 0;
 
-    // TODO Write to PC?
-
     // Write to registers
+
+    enum PCSrcSel PCSrcSel = PCSrc_C;
+
+    if (microIns.pc == mPWCa)
+      PCSrcSel = PCSrc_A;
+    else if (microIns.pc == mPWCb)
+      PCSrcSel = PCSrc_B;
+    else if (microIns.pc == mPWCalu_out)
+      PCSrcSel = PCSrc_ALUOut;
+    else if (microIns.pc == mPWCjump_address)
+      PCSrcSel = PCSrc_IRAddr;
+
+    // Write to PC only if the write signal is enabled OR either the c_cond or
+    // c_not_cond signals are enabled and their conditions is met
+    if (((microIns.pc == mPWCc_cond && ALUOut.Zero) ||
+         (microIns.pc == mPWCc_not_cond && !ALUOut.Zero)) ||
+        microIns.pc != mPWCnothing) {
+      PC = PCSrc(PCSrcSel, ALUOut.Out);
+    }
+
+    if (microIns.mem == mMCread_pc)
+      DR = IR = MemOut;
+    else if (microIns.mem == mMCread_c)
+      DR = MemOut;
+
     A = RegOut.ReadData1;
     B = RegOut.ReadData2;
+    C = ALUOut.Out;
+    D = ALSUOut;
 
     if (microIns.exit == mECexit) {
       printf(ANSI_FM "Exiting simulation\n" ANSI_0);
