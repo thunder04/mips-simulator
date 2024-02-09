@@ -1,6 +1,4 @@
 #include "multiplexers.h"
-#include "units/arithmetic_and_logic_shift_unit.h"
-#include "units/arithmetic_and_logic_unit.h"
 
 // Naming conventions:
 //   - m stands for microcode
@@ -83,5 +81,7 @@ struct MicrocodeRow {
   // Special operation that will exit the simulation, if enabled
   enum mExitControl exit;
 };
+
+extern const struct MicrocodeRow MICROCODE[];
 
 int opcode_to_microcode_idx(int opcode);

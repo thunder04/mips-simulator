@@ -25,6 +25,13 @@ enum ALUSrcBSel {
   ALUSrcB_SignExtendSll2,
 };
 
+enum ALSUOpSel {
+  ALSUOp_Sll,
+  ALSUOp_Srl,
+  ALSUOp_Sra,
+  ALSUOp_Ror,
+};
+
 // TODO Is this really needed?
 enum ALSUSrcASel {
   ALSUSrcA_A,
@@ -38,7 +45,8 @@ enum ALSUSrcBSel {
 enum ALUOpSel {
   ALUOp_Add,
   ALUOp_Sub,
-  ALUOp_Funct,
+  ALUOp_And,
+  ALUOp_Or,
 };
 
 enum PCSrcSel {

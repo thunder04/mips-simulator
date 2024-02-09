@@ -1,5 +1,3 @@
-// Multi-cycle MIPS Processor Simulator
-
 #include "multiplexers.h"
 #include "macros.h"
 #include "special_function_registers.h"

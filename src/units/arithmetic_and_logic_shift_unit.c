@@ -1,13 +1,13 @@
 #include "arithmetic_and_logic_shift_unit.h"
 #include "../macros.h"
 
-unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOp op) {
+unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOpSel op) {
   switch (op) {
-  case ALSUOp_SLL:
+  case ALSUOp_Sll:
     return num << amount;
-  case ALSUOp_SRL:
+  case ALSUOp_Srl:
     return num >> amount;
-  case ALSUOp_SRA:
+  case ALSUOp_Sra:
     if ((int)num < 0) {
       // SRA on signed integers is compiler dependent behavior. Sometimes, it's
       // even undefined behavior. Therefore it's not reliable.
@@ -16,7 +16,7 @@ unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOp op) {
     } else {
       return num >> amount;
     }
-  case ALSUOp_ROR:
+  case ALSUOp_Ror:
     // - num >> amount: Make room for the new digits
     // - num & MASK(amount): Isolate the bits to be moved. Let result be RES
     // - RES << (32 - amount): Put the bits in the Most Significant Bits

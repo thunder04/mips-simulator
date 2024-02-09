@@ -1,6 +1,3 @@
-enum ALSUOp {
-  ALSUOp_SLL,
-  ALSUOp_SRL,
-  ALSUOp_SRA,
-  ALSUOp_ROR,
-};
+#include "../multiplexers.h"
+
+unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOpSel op);
