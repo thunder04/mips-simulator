@@ -224,9 +224,14 @@ void handle_rf_column(struct MicrocodeRow *microIns,
     *MemToRegSel = MemToReg_A;
     *RegWrite = 1;
     break;
-  case mRCwrite_ra_c:
+  case mRCwrite_ra_b:
     *RegDstSel = RegDst_Ra;
-    *MemToRegSel = MemToReg_C;
+    *MemToRegSel = MemToReg_B;
+    *RegWrite = 1;
+    break;
+  case mRCwrite_ra_pc:
+    *RegDstSel = RegDst_Ra;
+    *MemToRegSel = MemToReg_PC;
     *RegWrite = 1;
     break;
   case mRCnothing:

@@ -9,70 +9,69 @@
 // instruction, do NOT forget to update the jump table and the comments.
 // clang-format off
 const struct MicrocodeRow MICROCODE[] = {
-  // 0 - fetch:
+  // 0 - fetch: PC += 4; C = PC + imm
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_4, .mem = mMCread_pc, .pc = mPWCalu_out },
   { .sequencing = { mSKdisp }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_SignExtend, .rf = mRCread_rs_rt },
   // 2 - break:
   { .sequencing = { mSKlabel, 0 }, .exit = mECexit },
-  // 3 - add:
+  // 3 - add: rd = rs + rt
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
-  // 5 - sub:
+  // 5 - sub: rd = rs - rt
   { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
-  // 7 - or:
+  // 7 - or: rd = rs | rt
   { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
-  // 9 - and:
+  // 9 - and: rd = rs & rt
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
-  // 11 - sllv:
+  // 11 - sllv: rd = rs >> rt
   { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 13 - srlv:
+  // 13 - srlv: rd = rs << rt
   { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 15 - srav:
+  // 15 - srav: rd = rs >>> rt
   { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 17 - rorv:
+  // 17 - rorv: rd = rs ROR rt
   { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 19 - addi:
+  // 19 - addi: rt = rs + imm
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
-  // 21 - ori:
+  // 21 - ori: rt = rs | imm
   { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
-  // 23 - andi:
+  // 23 - andi: rt = rs & imm
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
-  // 25 - sll:
+  // 25 - sll: rt = rs << shamt
   { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 27 - srl:
+  // 27 - srl: rt = rs >> shamt
   { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 29 - sra:
+  // 29 - sra: rt = rs >>> shamt
   { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 31 - ror:
+  // 31 - ror: rt = rs ROR shamt
   { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 33 - beq
+  // 33 - beq: if (rs == rt) PC = C
   { .sequencing = { mSKlabel, 0 }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B, .pc = mPWCc_cond },
-  // 34 - bne
+  // 34 - bne: if (rs != rt) PC = C
   { .sequencing = { mSKlabel, 0 }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B, .pc = mPWCc_not_cond },
-  // 35 - j
+  // 35 - j: PC = addr
   { .sequencing = { mSKlabel, 0 }, .pc = mPWCjump_address },
-  // 36 - jr
+  // 36 - jr: PC = rs
   { .sequencing = { mSKlabel, 0 }, .pc = mPWCa },
-  // 37 - jal
-  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_4 },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_c, .pc = mPWCjump_address },
-  // 39 - jalr
+  // 37 - jal: $31 = PC; PC = addr
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_pc, .pc = mPWCjump_address },
+  // 38 - jalr: $31 = rd; PC = rs
   { .sequencing = { mSKseq }, .rf = mRCread_rs_rd },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_a, .pc = mPWCb },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_b, .pc = mPWCa },
 };
 // clang-format on
 
@@ -102,7 +101,7 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     35, // INSTRUCTION: j
     36, // INSTRUCTION: jr
     37, // INSTRUCTION: jal
-    39, // INSTRUCTION: jalr
+    38, // INSTRUCTION: jalr
     -1, // INSTRUCTION: slladd
     -1, // INSTRUCTION: srladd
     -1, // INSTRUCTION: sraadd

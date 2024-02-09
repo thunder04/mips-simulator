@@ -30,12 +30,16 @@ unsigned int MemToReg(enum MemToRegSel sel) {
   switch (sel) {
   case MemToReg_A:
     return A;
+  case MemToReg_B:
+    return B;
   case MemToReg_C:
     return C;
   case MemToReg_D:
     return D;
   case MemToReg_DR:
     return DR;
+  case MemToReg_PC:
+    return PC;
   default:
     return 0;
   }

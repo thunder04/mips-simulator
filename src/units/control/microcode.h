@@ -41,10 +41,12 @@ enum mRfControl {
   mRCwrite_rt_d,
   // Write to rt the contents of DR
   mRCwrite_rt_dr,
-  // Write to ra the contents of C
-  mRCwrite_ra_c,
-  // Write to ra the contents of A (rs)
+  // Write to ra the contents of A
   mRCwrite_ra_a,
+  // Write to ra the contents of B
+  mRCwrite_ra_b,
+  // Write to ra the contents of PC
+  mRCwrite_ra_pc,
 };
 
 enum mPcWriteControl {

@@ -8,9 +8,11 @@ enum IorDSel {
 
 enum MemToRegSel {
   MemToReg_A,
+  MemToReg_B,
   MemToReg_C,
   MemToReg_D,
   MemToReg_DR,
+  MemToReg_PC,
 };
 
 enum RegDstSel {
