@@ -38,11 +38,11 @@ enum ALUSrcBSel {
 
 // TODO Is this really needed?
 enum ALSUSrcASel {
-  ALSUSrcA_A,
+  ALSUSrcA_B,
 };
 
 enum ALSUSrcBSel {
-  ALSUSrcB_B,
+  ALSUSrcB_A,
   ALSUSrcB_Shamt,
 };
 

@@ -26,17 +26,17 @@ const struct MicrocodeRow MICROCODE[] = {
   // 9 - and: rd = rs & rt
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
-  // 11 - sllv: rd = rs >> rt
-  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
+  // 11 - sllv: rd = rt << rs
+  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_A },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 13 - srlv: rd = rs << rt
-  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
+  // 13 - srlv: rd = rt >> rs
+  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_A },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 15 - srav: rd = rs >>> rt
-  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
+  // 15 - srav: rd = rt >>> rs
+  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_A },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 17 - rorv: rd = rs ROR rt
-  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
+  // 17 - rorv: rd = rt ROR rs
+  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_A },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 19 - addi: rt = rs + imm
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
@@ -47,17 +47,17 @@ const struct MicrocodeRow MICROCODE[] = {
   // 23 - andi: rt = rs & imm
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
-  // 25 - sll: rt = rs << shamt
-  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
+  // 25 - sll: rd = rt << shamt
+  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 27 - srl: rt = rs >> shamt
-  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
+  // 27 - srl: rd = rt >> shamt
+  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 29 - sra: rt = rs >>> shamt
-  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
+  // 29 - sra: rd = rt >>> shamt
+  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
-  // 31 - ror: rt = rs ROR shamt
-  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
+  // 31 - ror: rd = rt ROR shamt
+  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 33 - beq: if (rs == rt) PC = C
   { .sequencing = { mSKlabel, 0 }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B, .pc = mPWCc_cond },

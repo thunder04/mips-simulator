@@ -73,8 +73,8 @@ unsigned int ALUSrcB(enum ALUSrcBSel sel) {
 
 unsigned int ALSUSrcA(enum ALSUSrcASel sel) {
   switch (sel) {
-  case ALSUSrcA_A:
-    return A;
+  case ALSUSrcA_B:
+    return B;
   default:
     return 0;
   }
@@ -82,8 +82,8 @@ unsigned int ALSUSrcA(enum ALSUSrcASel sel) {
 
 unsigned int ALSUSrcB(enum ALSUSrcBSel sel) {
   switch (sel) {
-  case ALSUSrcB_B:
-    return B;
+  case ALSUSrcB_A:
+    return A;
   case ALSUSrcB_Shamt:
     return IR_shamt();
   default:

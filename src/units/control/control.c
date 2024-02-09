@@ -81,12 +81,11 @@ void control() {
             : EMPTY_ALU_RETURN;
 
     unsigned int ALSUOut =
-        microIns.alu != mASCnothing
+        microIns.alsu != mASCnothing
             ? alsu(ALSUSrcA(microIns.alsu1), ALSUSrcB(microIns.alsu2), ALSUOp)
             : 0;
 
-    // Write to registers
-
+    // Perhaps a bit late, but better than never. Handle the PC column
     enum PCSrcSel PCSrcSel = PCSrc_C;
 
     if (microIns.pc == mPWCa)
@@ -105,6 +104,8 @@ void control() {
         microIns.pc != mPWCnothing) {
       PC = PCSrc(PCSrcSel, ALUOut.Out);
     }
+
+    // Write to registers
 
     if (microIns.mem == mMCread_pc)
       DR = IR = MemOut;
