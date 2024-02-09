@@ -1,6 +1,6 @@
 // Multi-cycle MIPS Processor Simulator
 
-#include "macros.h" // For the DEBUG
+#include "macros.h"
 #include "special_function_registers.h"
 #include "units/control/control.h"
 #include "units/memory.h"
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   control();
 
   printf("\n=== Ending simulation ===\n");
-  
+
   return 0;
 }
 
@@ -64,9 +64,7 @@ void parse_file(FILE *fptr) {
     unsigned int word = (unsigned int)strtol(buf, &endptr, 2);
 
     if (*endptr != '\0' && *endptr != '\n' && *endptr != '\r') {
-#ifdef DEBUG
-      printf(ANSI_FM "[DEBUG] Skipping line \"%s\"\n" ANSI_0, buf);
-#endif
+      DEBUG_PRINTF("Skipping line \"%s\"\n", buf);
 
       continue;
     }

@@ -11,10 +11,8 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   // 5MB stack allocation. On Linux, where I am creating this, it's
   // configurable.
   if (MEM == NULL) {
-#ifdef DEBUG
-    printf(ANSI_FM "[DEBUG] Allocating %ld bytes of memory\n" ANSI_0,
-           sizeof(unsigned int) * MEM_SIZE);
-#endif
+    DEBUG_PRINTF("Allocating %ld bytes of memory\n",
+                 sizeof(unsigned int) * MEM_SIZE);
 
     MEM = (unsigned int *)malloc(sizeof(unsigned int) * MEM_SIZE);
 
@@ -30,15 +28,10 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   }
 
   if (MemWrite) {
-#ifdef DEBUG
-    printf(ANSI_FM "[DEBUG] W MEM[%u] <== %u\n" ANSI_0, Address, WriteData);
-#endif
-
+    DEBUG_PRINTF("W MEM[%u] <== %u\n", Address, WriteData);
     MEM[Address] = WriteData;
   } else if (MemRead) {
-#ifdef DEBUG
-    printf(ANSI_FM "[DEBUG] R MEM[%u] ==> %u\n" ANSI_0, Address, MEM[Address]);
-#endif
+    DEBUG_PRINTF("R MEM[%u] ==> %u\n", Address, MEM[Address]);
 
     return MEM[Address];
   }

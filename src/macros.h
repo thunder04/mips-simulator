@@ -6,9 +6,6 @@
 // Comment out the next line to disable DEBUG messages
 #define DEBUG
 
-// Comment out the next line to disable TRACE messages
-#define TRACE
-
 // Used to print to stdout/stderr with colors
 #define ANSI_FR "\x1b[31m"
 #define ANSI_FG "\x1b[32m"
@@ -26,5 +23,14 @@
 // MSB with imm itself. Otherwise, leave it as it is.
 #define IMM_SIGN_EXTEND(imm)                                                   \
   (((imm) >> 15) == 1 ? (MASK(16) << 16) | (imm) : (imm))
+
+#ifdef DEBUG
+#define DEBUG_PRINTF(format, ...)                                              \
+  printf(ANSI_FM "[DEBUG] " ANSI_0 format, ##__VA_ARGS__)
+#else
+#define DEBUG_PRINTF(...)                                                      \
+  do {                                                                         \
+  } while (0)
+#endif
 
 #endif

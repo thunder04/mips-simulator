@@ -1,5 +1,5 @@
 #include "register_file.h"
-#include "../macros.h" // For the DEBUG
+#include "../macros.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -19,22 +19,14 @@ struct RegOut reg(unsigned int ReadRegister1, unsigned int ReadRegister2,
 
   if (RegWrite) {
     VALIDATE(WriteRegister);
-
-#ifdef DEBUG
-    printf(ANSI_FM "[DEBUG] W REG[%u] <== %u\n" ANSI_0, WriteRegister,
-           WriteData);
-#endif
+    DEBUG_PRINTF("W REG[%u] <== %u\n", WriteRegister, WriteData);
 
     REG[WriteRegister] = WriteData;
   } else {
     VALIDATE(ReadRegister1);
     VALIDATE(ReadRegister2);
-
-#ifdef DEBUG
-    printf(
-        ANSI_FM "[DEBUG] R RD1: REG[%u] ==> %u\tRD2: REG[%u] ==> %u\n" ANSI_0,
-        ReadRegister1, REG[ReadRegister1], ReadRegister2, REG[ReadRegister2]);
-#endif
+    DEBUG_PRINTF("R RD1: REG[%u] ==> %u\tRD2: REG[%u] ==> %u\n", ReadRegister1,
+                 REG[ReadRegister1], ReadRegister2, REG[ReadRegister2]);
 
     regOut.ReadData1 = REG[ReadRegister1];
     regOut.ReadData2 = REG[ReadRegister2];

@@ -143,11 +143,12 @@ void handle_sequencing_column(struct MicrocodeRow *microIns) {
     IC += 1;
 
 #ifdef DEBUG
-    printf(ANSI_FM "[DEBUG] About to process instruction: " ANSI_FR);
+    printf("\n");
+    DEBUG_PRINTF("About to process instruction: ");
 
     // Print the instruction in bits
     for (int b = 0, l = sizeof(unsigned int) * 8; b < l; ++b) {
-      printf("%i", (IR >> (l - b - 1)) & 0x01);
+      printf(ANSI_FR "%i", (IR >> (l - b - 1)) & 0x01);
 
       if (b > 0 && b % 5 == 0 && b < 30)
         printf(" ");
