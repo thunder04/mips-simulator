@@ -1,5 +1,9 @@
 #include "control.h"
 #include "../../special_function_registers.h"
+#include "../arithmetic_and_logic_shift_unit.h"
+#include "../arithmetic_and_logic_unit.h"
+#include "../memory.h"
+#include "../register_file.h"
 #include "microcode.h"
 
 // Instruction Counter and μPC

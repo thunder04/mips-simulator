@@ -1,5 +1,5 @@
 #include "register_file.h"
-#include "../macros.h"
+#include "../macros.h" // For the DEBUG
 #include <stdio.h>
 #include <stdlib.h>
 

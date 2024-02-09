@@ -1,3 +1,6 @@
+#ifndef _MULTIPLEXERS
+#define _MULTIPLEXERS
+
 enum IorDSel {
   IorD_PC,
   IorD_C,
@@ -61,3 +64,5 @@ unsigned int MemToReg(enum MemToRegSel sel);
 unsigned int ALUSrcA(enum ALUSrcASel sel);
 unsigned int ALUSrcB(enum ALUSrcBSel sel);
 unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut);
+
+#endif

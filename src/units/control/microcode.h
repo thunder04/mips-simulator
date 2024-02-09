@@ -1,3 +1,6 @@
+#ifndef _MICROCODE
+#define _MICROCODE
+
 #include "../../multiplexers.h"
 
 // Naming conventions:
@@ -85,3 +88,5 @@ struct MicrocodeRow {
 extern const struct MicrocodeRow MICROCODE[];
 
 int opcode_to_microcode_idx(int opcode);
+
+#endif

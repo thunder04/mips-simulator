@@ -1,3 +1,6 @@
+#ifndef _MACROS
+#define _MACROS
+
 // General macros and global constants go here.
 
 // Comment out the next line to disable DEBUG messages
@@ -20,3 +23,5 @@
 // MSB with imm itself. Otherwise, leave it as it is.
 #define IMM_SIGN_EXTEND(imm)                                                   \
   (((imm) >> 15) == 1 ? (MASK(16) << 16) | (imm) : (imm))
+
+#endif

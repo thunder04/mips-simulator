@@ -1,10 +1,9 @@
 // Multi-cycle MIPS Processor Simulator
 
-#include "macros.h"
+#include "macros.h" // For the DEBUG
 #include "special_function_registers.h"
 #include "units/control/control.h"
 #include "units/memory.h"
-#include "units/register_file.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,5 +1,5 @@
 #include "memory.h"
-#include "../macros.h"
+#include "../macros.h" // For the DEBUG
 #include <stdio.h>
 #include <stdlib.h>
 
