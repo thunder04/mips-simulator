@@ -16,49 +16,49 @@ const struct MicrocodeRow MICROCODE[] = {
   { .sequencing = { mSKlabel, 0 }, .exit = mECexit },
   // 3 - add:
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
   // 5 - sub:
   { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
   // 7 - or:
   { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
   // 9 - and:
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
   // 11 - sllv:
   { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 13 - srlv:
   { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 15 - srav:
   { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 17 - rorv:
   { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_B },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 19 - addi:
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
   // 21 - ori:
   { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
   // 23 - andi:
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
   // 25 - sll:
   { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 27 - srl:
   { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 29 - sra:
   { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 31 - ror:
   { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_A, .alsu2 = ALSUSrcB_Shamt },
-  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_d },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_d },
   // 33 - beq
   { .sequencing = { mSKlabel, 0 }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B, .pc = mPWCc_cond },
   // 34 - bne

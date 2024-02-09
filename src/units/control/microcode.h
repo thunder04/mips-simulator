@@ -32,11 +32,15 @@ enum mRfControl {
   // Read the rs and rd fields of IR and save them to A and B, respectively
   mRCread_rs_rd,
   // Write to rd the contents of C
-  mRCwrite_c,
+  mRCwrite_rd_c,
   // Write to rd the contents of D
-  mRCwrite_d,
+  mRCwrite_rd_d,
+  // Write to rt the contents of C
+  mRCwrite_rt_c,
+  // Write to rt the contents of D
+  mRCwrite_rt_d,
   // Write to rt the contents of DR
-  mRCwrite_dr,
+  mRCwrite_rt_dr,
   // Write to ra the contents of C
   mRCwrite_ra_c,
   // Write to ra the contents of A (rs)

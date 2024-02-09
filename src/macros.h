@@ -6,6 +6,9 @@
 // Comment out the next line to disable DEBUG messages
 #define DEBUG
 
+// Comment out the next line to disable TRACE messages
+#define TRACE
+
 // Used to print to stdout/stderr with colors
 #define ANSI_FR "\x1b[31m"
 #define ANSI_FG "\x1b[32m"

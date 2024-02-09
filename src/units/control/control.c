@@ -111,10 +111,15 @@ void control() {
     else if (microIns.mem == mMCread_c)
       DR = MemOut;
 
-    A = RegOut.ReadData1;
-    B = RegOut.ReadData2;
-    C = ALUOut.Out;
-    D = ALSUOut;
+    if (microIns.rf != mRCnothing) {
+      A = RegOut.ReadData1;
+      B = RegOut.ReadData2;
+    }
+
+    if (microIns.alu != mACnothing)
+      C = ALUOut.Out;
+    if (microIns.alsu != mASCnothing)
+      D = ALSUOut;
 
     // Exit simulation if we received the break instruction
     if (microIns.exit == mECexit) {
@@ -143,7 +148,8 @@ void handle_sequencing_column(struct MicrocodeRow *microIns) {
     for (int b = 0, l = sizeof(unsigned int) * 8; b < l; ++b) {
       printf("%i", (IR >> (l - b - 1)) & 0x01);
 
-      if (b > 0 && b % 5 == 0 && b < 30) printf(" ");
+      if (b > 0 && b % 5 == 0 && b < 30)
+        printf(" ");
     }
 
     printf("\n" ANSI_0);
@@ -188,25 +194,40 @@ void handle_rf_column(struct MicrocodeRow *microIns,
     *ReadRegister1 = IR_rs();
     *ReadRegister2 = IR_rd();
     break;
-  case mRCwrite_c:
+  case mRCwrite_rd_c:
     *RegDstSel = RegDst_Rd;
     *MemToRegSel = MemToReg_C;
+    *RegWrite = 1;
     break;
-  case mRCwrite_d:
+  case mRCwrite_rd_d:
     *RegDstSel = RegDst_Rd;
     *MemToRegSel = MemToReg_D;
+    *RegWrite = 1;
     break;
-  case mRCwrite_dr:
+  case mRCwrite_rt_c:
+    *RegDstSel = RegDst_Rt;
+    *MemToRegSel = MemToReg_C;
+    *RegWrite = 1;
+    break;
+  case mRCwrite_rt_d:
+    *RegDstSel = RegDst_Rt;
+    *MemToRegSel = MemToReg_D;
+    *RegWrite = 1;
+    break;
+  case mRCwrite_rt_dr:
     *RegDstSel = RegDst_Rt;
     *MemToRegSel = MemToReg_DR;
+    *RegWrite = 1;
     break;
   case mRCwrite_ra_a:
     *RegDstSel = RegDst_Ra;
     *MemToRegSel = MemToReg_A;
+    *RegWrite = 1;
     break;
   case mRCwrite_ra_c:
     *RegDstSel = RegDst_Ra;
     *MemToRegSel = MemToReg_C;
+    *RegWrite = 1;
     break;
   case mRCnothing:
     break;
