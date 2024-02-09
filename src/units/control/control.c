@@ -7,109 +7,143 @@ unsigned int IC = 0, microPC = 0;
 // CPU Clock
 unsigned int clock = 0;
 
+void handle_alu_column(struct MicrocodeRow *microIns, enum ALUOpSel *ALUOp);
+void handle_alsu_column(struct MicrocodeRow *microIns, enum ALSUOpSel *ALSUOp);
+void handle_rf_column(struct MicrocodeRow *microIns,
+                      unsigned int *ReadRegister1, unsigned int *ReadRegister2,
+                      unsigned int *WriteRegister, unsigned int *WriteData,
+                      unsigned int *RegWrite);
+void handle_mem_column(struct MicrocodeRow *microIns, unsigned int *Address,
+                       unsigned int *MemRead, unsigned int *MemWrite,
+                       unsigned int *WriteData);
+void handle_sequencing_column(struct MicrocodeRow *microIns);
+
 void control() {
   while (1) {
-    struct MicrocodeRow microInstruction = MICROCODE[microPC];
+    struct MicrocodeRow microIns = MICROCODE[microPC];
 
     // Increment the CPU clock
     clock += 1;
 
-    // Handle microcode columns
-    // NOTE: I could use a switch/case here, but it turns out it's more verbose
-    // than a plain if/else chain.
-
-    // clang-format off
-
     // Handle the ALU column
-    // ALU1 and ALU2 are provided as is by the μInstruction
+    // ALU1 and ALU2 are provided as is by the μInstruction for simplicity
     enum ALUOpSel ALUOp;
-    
-    if (microInstruction.alu == mACadd) ALUOp = ALUOp_Add;
-    else if (microInstruction.alu == mACsub) ALUOp = ALUOp_Sub;
-    else if (microInstruction.alu == mACand) ALUOp = ALUOp_And;
-    else if (microInstruction.alu == mACor) ALUOp = ALUOp_Or;
+    handle_alu_column(&microIns, &ALUOp);
 
     // Handle the ALSU column
-    // ALSU1 and ALSU2 are provided as is by the μInstruction
+    // ALSU1 and ALSU2 are provided as is by the μInstruction for simplicity
     enum ALSUOpSel ALSUOp;
-    
-    if (microInstruction.alsu == mASCsll) ALSUOp = ALSUOp_Sll;
-    else if (microInstruction.alsu == mASCsrl) ALSUOp = ALSUOp_Srl;
-    else if (microInstruction.alsu == mASCsra) ALSUOp = ALSUOp_Sra;
-    else if (microInstruction.alsu == mASCror) ALSUOp = ALSUOp_Ror;
-
-    // clang-format on
+    handle_alsu_column(&microIns, &ALSUOp);
 
     // Handle the RF column
     unsigned int ReadRegister1 = 0, ReadRegister2 = 0, WriteRegister = 0,
                  RfWriteData = 0, RegWrite = 0;
-
-    switch (microInstruction.rf) {
-    case mRCread_rs_rt:
-      ReadRegister1 = IR_rs();
-      ReadRegister2 = IR_rt();
-      break;
-    case mRCread_rs_rd:
-      ReadRegister1 = IR_rs();
-      ReadRegister2 = IR_rd();
-      break;
-    case mRCwrite_c:
-      WriteRegister = IR_rd();
-      RfWriteData = C;
-      break;
-    case mRCwrite_d:
-      WriteRegister = IR_rd();
-      RfWriteData = D;
-      break;
-    case mRCwrite_dr:
-      WriteRegister = IR_rt();
-      RfWriteData = DR;
-      break;
-    case mRCwrite_ra_a:
-      WriteRegister = 31;
-      RfWriteData = A;
-      break;
-    case mRCwrite_ra_c:
-      WriteRegister = 31;
-      RfWriteData = C;
-      break;
-    case mRCnothing:
-      break;
-    }
+    handle_rf_column(&microIns, &ReadRegister1, &ReadRegister2, &WriteRegister,
+                     &RfWriteData, &RegWrite);
 
     // Handle the MEM column
     unsigned int Address = 0, MemRead = 0, MemWrite = 0, MemWriteData = 0;
-    switch (microInstruction.mem) {
-    case mMCread_pc:
-      MemRead = 1;
-      Address = PC;
-      break;
-    case mMCread_c:
-      MemRead = 1;
-      Address = C;
-      break;
-    case mMCwrite_c:
-      MemWrite = 1;
-      MemWriteData = B;
-      Address = C;
-      break;
-    case mMCnothing:
-      break;
-    }
+    handle_mem_column(&microIns, &Address, &MemRead, &MemWrite, &MemWriteData);
 
     // Handle the sequencing column
-    switch (microInstruction.sequencing.kind) {
-    case mSKseq:
-      microPC += 1;
-      break;
-    case mSKlabel:
-      microPC = microInstruction.sequencing.label;
-      break;
-    case mSKdisp:
-      microPC = opcode_to_microcode_idx(IR_opcode());
-      // It seems a good place to increment the Instruction Counter
-      IC += 1;
-      break;
-    }
+    handle_sequencing_column(&microIns);
+  }
+}
+
+void handle_sequencing_column(struct MicrocodeRow *microIns) {
+  switch (microIns->sequencing.kind) {
+  case mSKseq:
+    microPC += 1;
+    break;
+  case mSKlabel:
+    microPC = microIns->sequencing.label;
+    break;
+  case mSKdisp:
+    microPC = opcode_to_microcode_idx(IR_opcode());
+    // It seems a good place to increment the Instruction Counter
+    IC += 1;
+    break;
+  }
+}
+
+void handle_alu_column(struct MicrocodeRow *microIns, enum ALUOpSel *ALUOp) {
+  if (microIns->alu == mACadd)
+    *ALUOp = ALUOp_Add;
+  else if (microIns->alu == mACsub)
+    *ALUOp = ALUOp_Sub;
+  else if (microIns->alu == mACand)
+    *ALUOp = ALUOp_And;
+  else if (microIns->alu == mACor)
+    *ALUOp = ALUOp_Or;
+}
+
+void handle_alsu_column(struct MicrocodeRow *microIns, enum ALSUOpSel *ALSUOp) {
+  if (microIns->alsu == mASCsll)
+    *ALSUOp = ALSUOp_Sll;
+  else if (microIns->alsu == mASCsrl)
+    *ALSUOp = ALSUOp_Srl;
+  else if (microIns->alsu == mASCsra)
+    *ALSUOp = ALSUOp_Sra;
+  else if (microIns->alsu == mASCror)
+    *ALSUOp = ALSUOp_Ror;
+}
+
+void handle_rf_column(struct MicrocodeRow *microIns,
+                      unsigned int *ReadRegister1, unsigned int *ReadRegister2,
+                      unsigned int *WriteRegister, unsigned int *WriteData,
+                      unsigned int *RegWrite) {
+  switch (microIns->rf) {
+  case mRCread_rs_rt:
+    *ReadRegister1 = IR_rs();
+    *ReadRegister2 = IR_rt();
+    break;
+  case mRCread_rs_rd:
+    *ReadRegister1 = IR_rs();
+    *ReadRegister2 = IR_rd();
+    break;
+  case mRCwrite_c:
+    *WriteRegister = IR_rd();
+    *WriteData = C;
+    break;
+  case mRCwrite_d:
+    *WriteRegister = IR_rd();
+    *WriteData = D;
+    break;
+  case mRCwrite_dr:
+    *WriteRegister = IR_rt();
+    *WriteData = DR;
+    break;
+  case mRCwrite_ra_a:
+    *WriteRegister = 31;
+    *WriteData = A;
+    break;
+  case mRCwrite_ra_c:
+    *WriteRegister = 31;
+    *WriteData = C;
+    break;
+  case mRCnothing:
+    break;
+  }
+}
+
+void handle_mem_column(struct MicrocodeRow *microIns, unsigned int *Address,
+                       unsigned int *MemRead, unsigned int *MemWrite,
+                       unsigned int *WriteData) {
+  switch (microIns->mem) {
+  case mMCread_pc:
+    *MemRead = 1;
+    *Address = PC;
+    break;
+  case mMCread_c:
+    *MemRead = 1;
+    *Address = C;
+    break;
+  case mMCwrite_c:
+    *MemWrite = 1;
+    *WriteData = B;
+    *Address = C;
+    break;
+  case mMCnothing:
+    break;
   }
 }
