@@ -104,6 +104,13 @@ const struct Microinstruction MICROCODE[] = {
   { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
   { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 64 - lw: rt = MEM[rs + imm]
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .mem = mMCread_c },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_dr },
+  // 67 - sw: MEM[rs + imm] = rt
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKlabel, 0 }, .mem = mMCwrite_c },
 };
 // clang-format on
 
@@ -142,8 +149,8 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     55, // INSTRUCTION: srlsub
     58, // INSTRUCTION: srasub
     61, // INSTRUCTION: rorsub
-    -1, // INSTRUCTION: lw
-    -1, // INSTRUCTION: sw
+    64, // INSTRUCTION: lw
+    67, // INSTRUCTION: sw
     -1, // NOTHING
     -1, // NOTHING
     -1, // NOTHING
