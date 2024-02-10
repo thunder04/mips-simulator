@@ -53,9 +53,6 @@ void parse_file(FILE *fptr) {
     exit(4);
   }
 
-  // Initialize PC from the end of reserved space, according to the textbook.
-  PC = MEM_RESERVED_SPACE;
-
   char buf[LINE_LIMIT];
   unsigned int addr = PC;
 

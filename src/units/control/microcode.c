@@ -11,7 +11,7 @@
 const struct MicrocodeRow MICROCODE[] = {
   // 0 - fetch: PC += 4; C = PC + imm
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_4, .mem = mMCread_pc, .pc = mPWCalu_out },
-  { .sequencing = { mSKdisp }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_SignExtend, .rf = mRCread_rs_rt },
+  { .sequencing = { mSKdisp }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_SignExtendSll2, .rf = mRCread_rs_rt },
   // 2 - break:
   { .sequencing = { mSKlabel, 0 }, .exit = mECexit },
   // 3 - add: rd = rs + rt

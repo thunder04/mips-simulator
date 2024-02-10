@@ -100,7 +100,7 @@ unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut) {
   case PCSrc_A:
     return A;
   case PCSrc_IRAddr:
-    return (PC & 0xF0000000) | (IR_addr() >> 2);
+    return (PC - 4) + ((PC & 0xF0000000) | (IR_addr() << 2));
   default:
     return 0;
   }
