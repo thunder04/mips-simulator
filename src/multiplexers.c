@@ -62,6 +62,8 @@ unsigned int ALUSrcB(enum ALUSrcBSel sel) {
     return 4;
   case ALUSrcB_B:
     return B;
+  case ALUSrcB_D:
+    return D;
   case ALUSrcB_SignExtend:
     return IMM_SIGN_EXTEND(IR_imm());
   case ALUSrcB_SignExtendSll2:

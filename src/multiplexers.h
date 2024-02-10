@@ -34,6 +34,7 @@ enum ALUSrcBSel {
   ALUSrcB_4,
   ALUSrcB_SignExtend,
   ALUSrcB_SignExtendSll2,
+  ALUSrcB_D,
 };
 
 // TODO Is this really needed?

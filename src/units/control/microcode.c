@@ -72,6 +72,38 @@ const struct MicrocodeRow MICROCODE[] = {
   // 38 - jalr: $31 = rd; PC = rs
   { .sequencing = { mSKseq }, .rf = mRCread_rs_rd },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_ra_b, .pc = mPWCa },
+  // 40 - slladd: D = rt << shamt; rd = rs + D
+  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 43 - srladd: D = rt >> shamt; rd = rs + D
+  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 46 - sraadd: D = rt >>> shamt; rd = rs + D
+  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 49 - roradd: D = rt ROR shamt; rd = rs + D
+  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 52 - sllsub: D = rt << shamt; rd = rs - D
+  { .sequencing = { mSKseq }, .alsu = mASCsll, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 55 - srlsub: D = rt >> shamt; rd = rs - D
+  { .sequencing = { mSKseq }, .alsu = mASCsrl, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 58 - srasub: D = rt >>> shamt; rd = rs - D
+  { .sequencing = { mSKseq }, .alsu = mASCsra, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 61 - rorsub: D = rt ROR shamt; rd = rs - D
+  { .sequencing = { mSKseq }, .alsu = mASCror, .alsu1 = ALSUSrcA_B, .alsu2 = ALSUSrcB_Shamt },
+  { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_D },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
 };
 // clang-format on
 
@@ -102,14 +134,14 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     36, // INSTRUCTION: jr
     37, // INSTRUCTION: jal
     38, // INSTRUCTION: jalr
-    -1, // INSTRUCTION: slladd
-    -1, // INSTRUCTION: srladd
-    -1, // INSTRUCTION: sraadd
-    -1, // INSTRUCTION: roradd
-    -1, // INSTRUCTION: sllsub
-    -1, // INSTRUCTION: srlsub
-    -1, // INSTRUCTION: srasub
-    -1, // INSTRUCTION: rorsub
+    40, // INSTRUCTION: slladd
+    43, // INSTRUCTION: srladd
+    46, // INSTRUCTION: sraadd
+    49, // INSTRUCTION: roradd
+    52, // INSTRUCTION: sllsub
+    55, // INSTRUCTION: srlsub
+    58, // INSTRUCTION: srasub
+    61, // INSTRUCTION: rorsub
     -1, // INSTRUCTION: lw
     -1, // INSTRUCTION: sw
     -1, // NOTHING
