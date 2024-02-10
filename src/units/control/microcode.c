@@ -8,7 +8,7 @@
 // end. If you end up needing an extra cycle for an already implemented
 // instruction, do NOT forget to update the jump table and the comments.
 // clang-format off
-const struct MicrocodeRow MICROCODE[] = {
+const struct Microinstruction MICROCODE[] = {
   // 0 - fetch: PC += 4; C = PC + imm
   { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_4, .mem = mMCread_pc, .pc = mPWCalu_out },
   { .sequencing = { mSKdisp }, .alu = mACadd, .alu1 = ALUSrcA_PC, .alu2 = ALUSrcB_SignExtendSll2, .rf = mRCread_rs_rt },

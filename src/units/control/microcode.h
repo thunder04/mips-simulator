@@ -72,7 +72,7 @@ struct mSequencing {
   unsigned int label;
 };
 
-struct MicrocodeRow {
+struct Microinstruction {
   struct mSequencing sequencing;
 
   enum mAluControl alu;
@@ -91,7 +91,7 @@ struct MicrocodeRow {
   enum mExitControl exit;
 };
 
-extern const struct MicrocodeRow MICROCODE[];
+extern const struct Microinstruction MICROCODE[];
 
 int opcode_to_microcode_idx(int opcode);
 
