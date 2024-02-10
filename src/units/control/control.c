@@ -17,19 +17,19 @@ unsigned int IC = 0, microPC = 0;
 // CPU Clock
 unsigned int clock = 0;
 
-void handle_alu_column(struct MicrocodeRow *microIns, enum ALUOp *ALUOp);
-void handle_alsu_column(struct MicrocodeRow *microIns, enum ALSUOp *ALSUOp);
-void handle_rf_column(struct MicrocodeRow *microIns,
+void handle_alu_column(struct Microinstruction *microIns, enum ALUOp *ALUOp);
+void handle_alsu_column(struct Microinstruction *microIns, enum ALSUOp *ALSUOp);
+void handle_rf_column(struct Microinstruction *microIns,
                       unsigned int *ReadRegister1, unsigned int *ReadRegister2,
                       unsigned int *RegWrite, enum RegDstSel *RegDstSel,
                       enum MemToRegSel *MemToRegSel);
-void handle_mem_column(struct MicrocodeRow *microIns, unsigned int *MemRead,
+void handle_mem_column(struct Microinstruction *microIns, unsigned int *MemRead,
                        unsigned int *MemWrite, enum IorDSel *IorDSel);
-void handle_sequencing_column(struct MicrocodeRow *microIns);
+void handle_sequencing_column(struct Microinstruction *microIns);
 
 void control() {
   while (1) {
-    struct MicrocodeRow microIns = MICROCODE[microPC];
+    struct Microinstruction microIns = MICROCODE[microPC];
 
     // Increment the CPU clock
     clock += 1;
@@ -129,7 +129,7 @@ void control() {
   }
 }
 
-void handle_sequencing_column(struct MicrocodeRow *microIns) {
+void handle_sequencing_column(struct Microinstruction *microIns) {
   switch (microIns->sequencing.kind) {
   case mSKseq:
     microPC += 1;
@@ -161,7 +161,7 @@ void handle_sequencing_column(struct MicrocodeRow *microIns) {
   }
 }
 
-void handle_alu_column(struct MicrocodeRow *microIns, enum ALUOp *ALUOp) {
+void handle_alu_column(struct Microinstruction *microIns, enum ALUOp *ALUOp) {
   if (microIns->alu == mACadd)
     *ALUOp = ALUOp_Add;
   else if (microIns->alu == mACsub)
@@ -172,7 +172,7 @@ void handle_alu_column(struct MicrocodeRow *microIns, enum ALUOp *ALUOp) {
     *ALUOp = ALUOp_Or;
 }
 
-void handle_alsu_column(struct MicrocodeRow *microIns, enum ALSUOp *ALSUOp) {
+void handle_alsu_column(struct Microinstruction *microIns, enum ALSUOp *ALSUOp) {
   if (microIns->alsu == mASCsll)
     *ALSUOp = ALSUOp_Sll;
   else if (microIns->alsu == mASCsrl)
@@ -183,7 +183,7 @@ void handle_alsu_column(struct MicrocodeRow *microIns, enum ALSUOp *ALSUOp) {
     *ALSUOp = ALSUOp_Ror;
 }
 
-void handle_rf_column(struct MicrocodeRow *microIns,
+void handle_rf_column(struct Microinstruction *microIns,
                       unsigned int *ReadRegister1, unsigned int *ReadRegister2,
                       unsigned int *RegWrite, enum RegDstSel *RegDstSel,
                       enum MemToRegSel *MemToRegSel) {
@@ -241,7 +241,7 @@ void handle_rf_column(struct MicrocodeRow *microIns,
   }
 }
 
-void handle_mem_column(struct MicrocodeRow *microIns, unsigned int *MemRead,
+void handle_mem_column(struct Microinstruction *microIns, unsigned int *MemRead,
                        unsigned int *MemWrite, enum IorDSel *IorDSel) {
   switch (microIns->mem) {
   case mMCread_pc:
