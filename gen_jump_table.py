@@ -52,7 +52,7 @@ print(f"static int OPCODE_JUMP_TABLE[{max}] = {{")
 
 for i in range(0, max):
     if i in opcodes:
-        print(f"\t-1, // INSTRUCTION: {opcodes[i]}")
+        print(f"\t-1, // INSTRUCTION: 0b{i:06b} => {opcodes[i]}")
     else:
         print("\t-1, // NOTHING")
 print("};")

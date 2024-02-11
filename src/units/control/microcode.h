@@ -18,6 +18,10 @@ enum mMemControl {
   mMCnothing,
   // Read the address PC, and save the result to IR and DR
   mMCread_pc,
+  // Read the address from A, and save the result to A
+  mMCread_a,
+  // Read the address from B, and save the result to B
+  mMCread_b,
   // Read the address C, and save the result to DR
   mMCread_c,
   // Write the contents of B to the address C
@@ -62,8 +66,6 @@ enum mPcWriteControl {
   mPWCc_not_cond,
   // Write to PC the contents of A
   mPWCa,
-  // Write to PC the contents of B
-  mPWCb,
 };
 
 struct mSequencing {
@@ -80,7 +82,6 @@ struct Microinstruction {
   enum ALUSrcBSel alu2;
 
   enum mAlSuControl alsu;
-  enum ALSUSrcASel alsu1;
   enum ALSUSrcBSel alsu2;
 
   enum mRfControl rf;

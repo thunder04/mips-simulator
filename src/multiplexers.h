@@ -3,6 +3,8 @@
 
 enum IorDSel {
   IorD_PC,
+  IorD_A,
+  IorD_B,
   IorD_C,
 };
 
@@ -27,6 +29,7 @@ enum RegDstSel {
 enum ALUSrcASel {
   ALUSrcA_PC,
   ALUSrcA_A,
+  ALUSrcA_B,
 };
 
 enum ALUSrcBSel {
@@ -35,11 +38,7 @@ enum ALUSrcBSel {
   ALUSrcB_SignExtend,
   ALUSrcB_SignExtendSll2,
   ALUSrcB_D,
-};
-
-// TODO Is this really needed?
-enum ALSUSrcASel {
-  ALSUSrcA_B,
+  ALUSrcB_DR,
 };
 
 enum ALSUSrcBSel {
@@ -50,7 +49,6 @@ enum ALSUSrcBSel {
 enum PCSrcSel {
   PCSrc_ALUOut,
   PCSrc_A,
-  PCSrc_B,
   PCSrc_C,
   PCSrc_IRAddr,
 };
@@ -60,7 +58,6 @@ unsigned int RegDst(enum RegDstSel sel);
 unsigned int MemToReg(enum MemToRegSel sel);
 unsigned int ALUSrcA(enum ALUSrcASel sel);
 unsigned int ALUSrcB(enum ALUSrcBSel sel);
-unsigned int ALSUSrcA(enum ALSUSrcASel sel);
 unsigned int ALSUSrcB(enum ALSUSrcBSel sel);
 unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut);
 

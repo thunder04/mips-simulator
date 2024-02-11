@@ -4,12 +4,14 @@
 
 unsigned int IorD(enum IorDSel sel) {
   switch (sel) {
+  case IorD_A:
+    return A;
+  case IorD_B:
+    return B;
   case IorD_C:
     return C;
   case IorD_PC:
     return PC;
-  default:
-    return 0;
   }
 }
 
@@ -21,8 +23,6 @@ unsigned int RegDst(enum RegDstSel sel) {
     return IR_rt();
   case RegDst_Ra:
     return 31;
-  default:
-    return 0;
   }
 }
 
@@ -40,8 +40,6 @@ unsigned int MemToReg(enum MemToRegSel sel) {
     return DR;
   case MemToReg_PC:
     return PC;
-  default:
-    return 0;
   }
 }
 
@@ -49,10 +47,10 @@ unsigned int ALUSrcA(enum ALUSrcASel sel) {
   switch (sel) {
   case ALUSrcA_A:
     return A;
+  case ALUSrcA_B:
+    return B;
   case ALUSrcA_PC:
     return PC;
-  default:
-    return 0;
   }
 }
 
@@ -64,21 +62,12 @@ unsigned int ALUSrcB(enum ALUSrcBSel sel) {
     return B;
   case ALUSrcB_D:
     return D;
+  case ALUSrcB_DR:
+    return DR;
   case ALUSrcB_SignExtend:
     return IMM_SIGN_EXTEND(IR_imm());
   case ALUSrcB_SignExtendSll2:
     return IMM_SIGN_EXTEND(IR_imm()) << 2;
-  default:
-    return 0;
-  }
-}
-
-unsigned int ALSUSrcA(enum ALSUSrcASel sel) {
-  switch (sel) {
-  case ALSUSrcA_B:
-    return B;
-  default:
-    return 0;
   }
 }
 
@@ -88,8 +77,6 @@ unsigned int ALSUSrcB(enum ALSUSrcBSel sel) {
     return A;
   case ALSUSrcB_Shamt:
     return IR_shamt();
-  default:
-    return 0;
   }
 }
 
@@ -97,13 +84,11 @@ unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut) {
   switch (sel) {
   case PCSrc_ALUOut:
     return ALUOut;
-  case PCSrc_C:
-    return C;
   case PCSrc_A:
     return A;
+  case PCSrc_C:
+    return C;
   case PCSrc_IRAddr:
     return (PC - 4) + ((PC & 0xF0000000) | (IR_addr() << 2));
-  default:
-    return 0;
   }
 }

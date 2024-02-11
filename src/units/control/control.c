@@ -31,9 +31,6 @@ void control() {
   while (1) {
     struct Microinstruction microIns = MICROCODE[microPC];
 
-    // Increment the CPU clock
-    clock += 1;
-
     // Handle the ALU column
     // ALU1 and ALU2 are provided as is by the μInstruction for simplicity
     enum ALUOp ALUOp;
@@ -63,6 +60,9 @@ void control() {
     // Handle the sequencing column
     handle_sequencing_column(&microIns);
 
+    // Increment the CPU clock
+    clock += 1;
+
     // Call the units
 
     MemData MemOut = microIns.mem != mMCnothing
@@ -80,18 +80,15 @@ void control() {
             ? alu(ALUSrcA(microIns.alu1), ALUSrcB(microIns.alu2), ALUOp)
             : EMPTY_ALU_RETURN;
 
-    unsigned int ALSUOut =
-        microIns.alsu != mASCnothing
-            ? alsu(ALSUSrcA(microIns.alsu1), ALSUSrcB(microIns.alsu2), ALSUOp)
-            : 0;
+    unsigned int ALSUOut = microIns.alsu != mASCnothing
+                               ? alsu(B, ALSUSrcB(microIns.alsu2), ALSUOp)
+                               : 0;
 
     // Perhaps a bit late, but better than never. Handle the PC column
     enum PCSrcSel PCSrcSel = PCSrc_C;
 
     if (microIns.pc == mPWCa)
       PCSrcSel = PCSrc_A;
-    else if (microIns.pc == mPWCb)
-      PCSrcSel = PCSrc_B;
     else if (microIns.pc == mPWCalu_out)
       PCSrcSel = PCSrc_ALUOut;
     else if (microIns.pc == mPWCjump_address)
@@ -107,7 +104,11 @@ void control() {
 
     // Write to registers
 
-    if (microIns.mem == mMCread_pc)
+    if (microIns.mem == mMCread_a)
+      A = MemOut;
+    else if (microIns.mem == mMCread_b)
+      B = MemOut;
+    else if (microIns.mem == mMCread_pc)
       DR = IR = MemOut;
     else if (microIns.mem == mMCread_c)
       DR = MemOut;
@@ -172,7 +173,8 @@ void handle_alu_column(struct Microinstruction *microIns, enum ALUOp *ALUOp) {
     *ALUOp = ALUOp_Or;
 }
 
-void handle_alsu_column(struct Microinstruction *microIns, enum ALSUOp *ALSUOp) {
+void handle_alsu_column(struct Microinstruction *microIns,
+                        enum ALSUOp *ALSUOp) {
   if (microIns->alsu == mASCsll)
     *ALSUOp = ALSUOp_Sll;
   else if (microIns->alsu == mASCsrl)
@@ -255,6 +257,14 @@ void handle_mem_column(struct Microinstruction *microIns, unsigned int *MemRead,
   case mMCwrite_c:
     *MemWrite = 1;
     *IorDSel = IorD_C;
+    break;
+  case mMCread_a:
+    *MemRead = 1;
+    *IorDSel = IorD_A;
+    break;
+  case mMCread_b:
+    *MemRead = 1;
+    *IorDSel = IorD_B;
     break;
   case mMCnothing:
     break;
