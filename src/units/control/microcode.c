@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define JUMP_TABLE_SIZE 63
+#define JUMP_TABLE_SIZE 64
 
 // Be mindful when you change the order of the microcode. Only append to the
 // end. If you end up needing an extra cycle for an already implemented
@@ -136,6 +136,26 @@ const struct Microinstruction MICROCODE[] = {
   { .sequencing = { mSKseq }, .mem = mMCread_b },
   { .sequencing = { mSKseq }, .alu = mACsub, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 85 - orm: DR = MEM[rs + imm]; rt = rt | DR
+  { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .mem = mMCread_c },
+  { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_B, .alu2 = ALUSrcB_DR },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
+  // 89 - orm: A = MEM[rs]; B = MEM[rt]; rd = A | B
+  { .sequencing = { mSKseq }, .mem = mMCread_a },
+  { .sequencing = { mSKseq }, .mem = mMCread_b },
+  { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 93 - andm: DR = MEM[rs + imm]; rt = rt & DR
+  { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKseq }, .mem = mMCread_c },
+  { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_B, .alu2 = ALUSrcB_DR },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
+  // 97 - andm: A = MEM[rs]; B = MEM[rt]; rd = A & B
+  { .sequencing = { mSKseq }, .mem = mMCread_a },
+  { .sequencing = { mSKseq }, .mem = mMCread_b },
+  { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
 };
 // clang-format on
 
@@ -192,12 +212,12 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     -1, // NOTHING
     69, // INSTRUCTION: 0b110000 => addm
     77, // INSTRUCTION: 0b110001 => subm
-    -1, // INSTRUCTION: 0b110010 => orm
-    -1, // INSTRUCTION: 0b110011 => andm
+    85, // INSTRUCTION: 0b110010 => orm
+    93, // INSTRUCTION: 0b110011 => andm
     73, // INSTRUCTION: 0b110100 => addm
     81, // INSTRUCTION: 0b110101 => subm
-    -1, // INSTRUCTION: 0b110110 => orm
-    -1, // INSTRUCTION: 0b110111 => andm
+    89, // INSTRUCTION: 0b110110 => orm
+    97, // INSTRUCTION: 0b110111 => andm
     -1, // NOTHING
     -1, // NOTHING
     -1, // NOTHING
@@ -205,6 +225,7 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     -1, // INSTRUCTION: 0b111100 => addmi
     -1, // NOTHING
     -1, // INSTRUCTION: 0b111110 => ormi
+    -1, // INSTRUCTION: 0b111111 => andmi
 };
 
 // Translates an opcode to the index/label of the implemented instruction in the
