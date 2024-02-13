@@ -4,6 +4,7 @@
 #include "special_function_registers.h"
 #include "units/control/control.h"
 #include "units/memory.h"
+#include "units/register_file.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,6 +16,9 @@
 void parse_file(FILE *fptr);
 
 int main(int argc, char *argv[]) {
+  // Initialize the $sp register
+  reg(0, 0, 29, MEM_START_OF_SP, 1);
+
   if (argc < 2) {
     printf("Usage: %s <object-file-path>\n", argv[0]);
     return 1;

@@ -3,8 +3,7 @@
 #include "units/memory.h"
 
 unsigned int A = 0, B = 0, C = 0, D = 0, DR = 0, IR = 0;
-// Start PC from the end of the reserved space, so at 0x00400000
-unsigned int PC = MEM_RESERVED_SPACE;
+unsigned int PC = MEM_START_OF_PC;
 
 unsigned int IR_opcode() { return (IR >> (32 - 6)) & MASK(6); }
 unsigned int IR_rs() { return (IR >> (26 - 5)) & MASK(5); }
