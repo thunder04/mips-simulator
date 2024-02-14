@@ -156,6 +156,18 @@ const struct Microinstruction MICROCODE[] = {
   { .sequencing = { mSKseq }, .mem = mMCread_b },
   { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_B },
   { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rd_c },
+  // 101 - addmi: A = MEM[rs]; rt = A + imm
+  { .sequencing = { mSKseq }, .mem = mMCread_a },
+  { .sequencing = { mSKseq }, .alu = mACadd, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
+  // 104 - ormi: A = MEM[rs]; rt = A | imm
+  { .sequencing = { mSKseq }, .mem = mMCread_a },
+  { .sequencing = { mSKseq }, .alu = mACor, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
+  // 107 - andmi: A = MEM[rs]; rt = A & imm
+  { .sequencing = { mSKseq }, .mem = mMCread_a },
+  { .sequencing = { mSKseq }, .alu = mACand, .alu1 = ALUSrcA_A, .alu2 = ALUSrcB_SignExtend },
+  { .sequencing = { mSKlabel, 0 }, .rf = mRCwrite_rt_c },
 };
 // clang-format on
 
@@ -222,10 +234,10 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     -1, // NOTHING
     -1, // NOTHING
     -1, // NOTHING
-    -1, // INSTRUCTION: 0b111100 => addmi
+    101, // INSTRUCTION: 0b111100 => addmi
     -1, // NOTHING
-    -1, // INSTRUCTION: 0b111110 => ormi
-    -1, // INSTRUCTION: 0b111111 => andmi
+    104, // INSTRUCTION: 0b111110 => ormi
+    107, // INSTRUCTION: 0b111111 => andmi
 };
 
 // Translates an opcode to the index/label of the implemented instruction in the
