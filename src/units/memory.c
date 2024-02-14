@@ -1,7 +1,12 @@
 #include "memory.h"
 #include "../macros.h" // For the DEBUG
+#include "../utils.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#define FROM_IDX (MEM_START_OF_PC)
+// #define FROM_IDX (MEM_START_OF_PC + MEM_MAX_PROGRAM_SIZE)
+#define TO_IDX (MEM_START_OF_SP)
 
 static unsigned int *MEM = NULL;
 
@@ -37,4 +42,17 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
   }
 
   return 0;
+}
+
+void write_mem_stats_section(FILE *fstatsptr) {
+  char binaryBuf[sizeof(unsigned int) * 8 + 1] = {0};
+  fprintf(fstatsptr, "\n===== Memory =====\n");
+  for (int i = FROM_IDX; i < TO_IDX; i += 4) {
+    unsigned int val = MEM[i];
+
+    if (val != 0) {
+      format_bits(binaryBuf, val);
+      fprintf(fstatsptr, "MEM[%u] = %u = 0b%s\n", i, val, binaryBuf);
+    }
+  }
 }

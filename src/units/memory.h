@@ -1,5 +1,6 @@
 #ifndef _MEMORY
 #define _MEMORY
+#include <stdio.h>
 
 // 4MB
 #define MEM_RESERVED_SPACE 0x00400000
@@ -16,5 +17,7 @@ typedef int MemData;
 
 MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
             unsigned int WriteData);
+
+void write_mem_stats_section(FILE *fstatsptr);
 
 #endif
