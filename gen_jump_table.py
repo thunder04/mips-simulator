@@ -24,7 +24,6 @@ opcodes = {
     0b110111: "andm",
     0b111100: "addmi",
     0b111110: "ormi",
-    # Keep a close eye on this one! The script didn't print it
     0b111111: "andmi",
     0b001100: "sll",
     0b001101: "srl",
@@ -49,11 +48,10 @@ max = -1
 for k in opcodes:
     if k > max:
         max = k
-print(f"static int OPCODE_JUMP_TABLE[{max}] = {{")
 
-for i in range(0, max):
+print(f"static int OPCODE_JUMP_TABLE[{max + 1}] = {{")
+
+for i in range(0, max + 1):
     if i in opcodes:
-        print(f"\t-1, // INSTRUCTION: 0b{i:06b} => {opcodes[i]}")
-    else:
-        print("\t-1, // NOTHING")
+        print(f"\t[0b{i:06b}] = 0 // {opcodes[i]}")
 print("};")
