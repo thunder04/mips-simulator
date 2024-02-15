@@ -3,6 +3,7 @@
 #include "macros.h"
 #include "special_function_registers.h"
 #include "units/control/control.h"
+#include "units/control/stats.h"
 #include "units/memory.h"
 #include "units/register_file.h"
 #include "utils.h"
@@ -46,13 +47,17 @@ int main(int argc, char *argv[]) {
 
   // Run the Control unit, which, for simplicity reasons, will also use (call)
   // the rest of the units. Something like running an event loop
-  printf("\n=== Starting simulation ===\n");
+  DEBUG_PRINTF(ANSI_FG "=== Starting simulation ===\n" ANSI_0);
   control();
-  printf("\n=== Ending simulation ===\n");
+  DEBUG_PRINTF(ANSI_FG "=== Ending simulation ===\n\n" ANSI_0);
+
+  printf("CPI for the program: %u\n", calculate_cpi());
 
   // Write to the stats file
   write_stats_file(fstatsptr);
   fclose(fstatsptr);
+
+  printf("Stats are written in \"%s\"\n", argv[2]);
 
   return 0;
 }
@@ -75,9 +80,9 @@ void parse_file(FILE *fptr) {
     char *endptr;
     unsigned int word = (unsigned int)strtol(buf, &endptr, 2);
 
-    // If string parsing didn't stop at the end
+    // If string parsing didn't stop at the end...
     if (*endptr != '\0' && *endptr != '\n' && *endptr != '\r' ||
-        // Or the string was empty
+        // ...or the string was empty, skip this line
         buf == endptr) {
       DEBUG_PRINTF("Skipping line \"%s\"\n", buf);
 
@@ -91,7 +96,7 @@ void parse_file(FILE *fptr) {
 
 void write_stats_file(FILE *fstatsptr) {
   fprintf(fstatsptr, "===== Stats =====\n");
-  fprintf(fstatsptr, "CPI = %d\nclock = %d\n", 0, clock);
+  fprintf(fstatsptr, "CPI = %d\nclock = %d\n", calculate_cpi(), clock);
 
   write_reg_stats_section(fstatsptr);
   write_mem_stats_section(fstatsptr);

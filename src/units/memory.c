@@ -5,7 +5,6 @@
 #include <stdlib.h>
 
 #define FROM_IDX (MEM_START_OF_PC)
-// #define FROM_IDX (MEM_START_OF_PC + MEM_MAX_PROGRAM_SIZE)
 #define TO_IDX (MEM_START_OF_SP)
 
 static unsigned int *MEM = NULL;
@@ -45,11 +44,14 @@ MemData mem(unsigned int Address, unsigned int MemRead, unsigned int MemWrite,
 }
 
 void write_mem_stats_section(FILE *fstatsptr) {
-  char binaryBuf[sizeof(unsigned int) * 8 + 1] = {0};
   fprintf(fstatsptr, "\n===== Memory =====\n");
+
+  char binaryBuf[sizeof(unsigned int) * 8 + 1] = {0};
+
   for (int i = FROM_IDX; i < TO_IDX; i += 4) {
     unsigned int val = MEM[i];
 
+    // Most memory addresses contain zeroes, exclude them to reduce clutter
     if (val != 0) {
       format_bits(binaryBuf, val);
       fprintf(fstatsptr, "MEM[%u] = %u = 0b%s\n", i, val, binaryBuf);

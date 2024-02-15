@@ -44,9 +44,10 @@ struct RegOut reg(unsigned int ReadRegister1, unsigned int ReadRegister2,
 void write_reg_stats_section(FILE *fstatsptr) {
   fprintf(fstatsptr, "\n===== Registers =====\n");
 
+  char binaryBuf[sizeof(unsigned int) * 8 + 1] = {0};
+
   for (int i = 0; i < 32; ++i) {
     unsigned int val = REG[i];
-    char binaryBuf[sizeof(unsigned int) * 8 + 1] = {0};
 
     format_bits(binaryBuf, val);
     fprintf(fstatsptr, "$%d = %u = 0b%s\n", i, val, binaryBuf);

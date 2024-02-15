@@ -7,15 +7,16 @@
 #include "../memory.h"
 #include "../register_file.h"
 #include "microcode.h"
+#include "stats.h"
 #include <stdio.h>
 
-const struct RegOut EMPTY_REG_RETURN = {0, 0};
-const struct ALUOut EMPTY_ALU_RETURN = {1, 0};
+static const struct RegOut EMPTY_REG_RETURN = {0, 0};
+static const struct ALUOut EMPTY_ALU_RETURN = {1, 0};
+static const unsigned int EMPTY_ALSU_RETURN = 0;
+static const unsigned int EMPTY_MEM_RETURN = 0;
 
 // Instruction Counter and μPC
-unsigned int IC = 0, microPC = 0;
-// CPU Clock
-unsigned int clock = 0;
+unsigned int clock = 0, microPC = 0;
 
 void handle_alu_column(struct Microinstruction *microIns, enum ALUOp *ALUOp);
 void handle_alsu_column(struct Microinstruction *microIns, enum ALSUOp *ALSUOp);
@@ -67,7 +68,7 @@ void control() {
 
     MemData MemOut = microIns.mem != mMCnothing
                          ? mem(IorD(IorDSel), MemRead, MemWrite, B)
-                         : 0;
+                         : EMPTY_MEM_RETURN;
 
     struct RegOut RegOut =
         microIns.rf != mRCnothing
@@ -82,7 +83,7 @@ void control() {
 
     unsigned int ALSUOut = microIns.alsu != mASCnothing
                                ? alsu(B, ALSUSrcB(microIns.alsu2), ALSUOp)
-                               : 0;
+                               : EMPTY_ALSU_RETURN;
 
     // Perhaps a bit late, but better than never. Handle the PC column
     enum PCSrcSel PCSrcSel = PCSrc_C;
@@ -140,8 +141,8 @@ void handle_sequencing_column(struct Microinstruction *microIns) {
     break;
   case mSKdisp:
     microPC = opcode_to_microcode_idx(IR_opcode());
-    // Here it seems a good place to increment the Instruction Counter
-    IC += 1;
+    // Here it seems a good place to handle stats
+    handle_ic_stats();
 
 #ifdef DEBUG
     printf("\n");

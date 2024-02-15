@@ -1,7 +1,7 @@
 #ifndef _CONTROL
 #define _CONTROL
 
-extern unsigned int IC, microPC, clock;
+extern unsigned int microPC, clock;
 
 void control();
 
