@@ -7,7 +7,7 @@ The program assumes the file is valid. Comments may be defined in a line startin
 
 ## Building The Simulator
 
-Run `clang -o mips-simulator src/**/*.c`
+Run `make clean; make all`
 
 > [!IMPORTANT]
 > It has been tested only on Linux.
