@@ -81,9 +81,9 @@ void parse_file(FILE *fptr) {
     unsigned int word = (unsigned int)strtol(buf, &endptr, 2);
 
     // If string parsing didn't stop at the end...
-    if (*endptr != '\0' && *endptr != '\n' && *endptr != '\r' ||
+    if ((*endptr != '\0' && *endptr != '\n' && *endptr != '\r') ||
         // ...or the string was empty, skip this line
-        buf == endptr) {
+        (buf == endptr)) {
       DEBUG_PRINTF("Skipping line \"%s\"\n", buf);
 
       continue;

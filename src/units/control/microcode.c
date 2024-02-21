@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-field-initializers"
+
 #include "microcode.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -239,3 +242,5 @@ int opcode_to_microcode_idx(int opcode) {
 
   return microcode_idx;
 }
+
+#pragma clang diagnostic pop
