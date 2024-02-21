@@ -1,8 +1,5 @@
-#ifndef _CONTROL
-#define _CONTROL
+#pragma once
 
 extern unsigned int microPC, clock;
 
 void control();
-
-#endif

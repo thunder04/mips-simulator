@@ -1,5 +1,4 @@
-#ifndef _MACROS
-#define _MACROS
+#pragma once
 
 // General macros and global constants go here.
 
@@ -31,6 +30,4 @@
 #define DEBUG_PRINTF(...)                                                      \
   do {                                                                         \
   } while (0)
-#endif
-
 #endif

@@ -1,5 +1,4 @@
-#ifndef _MULTIPLEXERS
-#define _MULTIPLEXERS
+#pragma once
 
 enum IorDSel {
   IorD_PC,
@@ -60,5 +59,3 @@ unsigned int ALUSrcA(enum ALUSrcASel sel);
 unsigned int ALUSrcB(enum ALUSrcBSel sel);
 unsigned int ALSUSrcB(enum ALSUSrcBSel sel);
 unsigned int PCSrc(enum PCSrcSel sel, unsigned int ALUOut);
-
-#endif

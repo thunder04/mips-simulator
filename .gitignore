@@ -1,2 +1,3 @@
-mips-simulator
-stats
+mips_simulator
+src/**/*.o
+*.stats

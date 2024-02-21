@@ -1,5 +1,4 @@
-#ifndef _MICROCODE
-#define _MICROCODE
+#pragma once
 
 #include "../../multiplexers.h"
 
@@ -95,5 +94,3 @@ struct Microinstruction {
 extern const struct Microinstruction MICROCODE[];
 
 int opcode_to_microcode_idx(int opcode);
-
-#endif

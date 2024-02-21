@@ -1,5 +1,4 @@
-#ifndef _ARITHMETIC_AND_LOGIC_SHIFT_UNIT
-#define _ARITHMETIC_AND_LOGIC_SHIFT_UNIT
+#pragma once
 
 #include "../multiplexers.h"
 
@@ -11,5 +10,3 @@ enum ALSUOp {
 };
 
 unsigned int alsu(unsigned int num, unsigned int amount, enum ALSUOp op);
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef _STATS
-#define _STATS
+#pragma once
 
 enum InstructionCategory {
   ICalu,
@@ -19,5 +18,3 @@ extern unsigned int ICStats[InstructionCategoryLen];
 
 unsigned int calculate_cpi();
 void handle_ic_stats();
-
-#endif

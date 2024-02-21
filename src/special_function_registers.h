@@ -1,5 +1,4 @@
-#ifndef _SPECIAL_FUNCTION_REGISTERS
-#define _SPECIAL_FUNCTION_REGISTERS
+#pragma once
 
 extern int A, B, C, D, DR, IR, PC;
 
@@ -12,5 +11,3 @@ unsigned int IR_shamt();
 // unsigned int IR_funct();
 unsigned int IR_addr();
 unsigned int IR_imm();
-
-#endif

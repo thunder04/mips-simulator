@@ -1,5 +1,4 @@
-#ifndef _ARITHMETIC_AND_LOGIC_UNIT
-#define _ARITHMETIC_AND_LOGIC_UNIT
+#pragma once
 
 #include "../multiplexers.h"
 
@@ -16,5 +15,3 @@ enum ALUOp {
 };
 
 struct ALUOut alu(unsigned int a, unsigned int b, enum ALUOp op);
-
-#endif
