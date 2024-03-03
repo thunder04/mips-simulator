@@ -3,7 +3,7 @@
 A minimal implementation of a Multi-cycle MIPS Simulator. It is not intended to be used for production use.
 
 It accepts a pseudo-object file, which is a file consisting of multiple 32-bit words, separated by a newline.
-The program assumes the file is valid. Comments may be defined in a line starting with `#`.
+The program assumes the file is valid. Any line starting with `#` are treated as comments, and are ignored.
 
 ## Building The Simulator
 
@@ -11,6 +11,11 @@ Run `make clean; make all`
 
 > [!IMPORTANT]
 > It has been tested only on Linux.
+
+### Running The Simulator
+
+Run `./mips_simulator pseudo-object-file stats-file`.
+For example: `./mips_simulator tests/1_math_test.o ./math_test.stats`
 
 ## Interesting Places
 
