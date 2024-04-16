@@ -19,7 +19,7 @@ For example: `./mips_simulator tests/1_math_test.o ./math_test.stats`
 
 ## Interesting Places
 
-<sup>More like keypoints for the university exercise</sup>
+<sup>More like keypoints for the university assignment</sup>
 
 - The `clock` of the CPU is stored at [`src/units/control/control.c`](src/units/control/control.c#L19)
 - The `μPC` of the CPU is stored at [`src/units/control/control.c`](src/units/control/control.c#L19)
