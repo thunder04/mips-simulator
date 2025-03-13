@@ -29,245 +29,248 @@ void handle_mem_column(struct Microinstruction *microIns, unsigned int *MemRead,
 void handle_sequencing_column(struct Microinstruction *microIns);
 
 void control() {
-  while (1) {
-    struct Microinstruction microIns = MICROCODE[microPC];
+    while (1) {
+        struct Microinstruction microIns = MICROCODE[microPC];
 
-    // Handle the ALU column
-    // ALU1 and ALU2 are provided as is by the μInstruction for simplicity
-    enum ALUOp ALUOp;
+        // Handle the ALU column
+        // ALU1 and ALU2 are provided as is by the μInstruction for
+        // simplicity
+        enum ALUOp ALUOp;
 
-    handle_alu_column(&microIns, &ALUOp);
+        handle_alu_column(&microIns, &ALUOp);
 
-    // Handle the ALSU column
-    // ALSU1 and ALSU2 are provided as is by the μInstruction for simplicity
-    enum ALSUOp ALSUOp;
+        // Handle the ALSU column
+        // ALSU1 and ALSU2 are provided as is by the μInstruction for
+        // simplicity
+        enum ALSUOp ALSUOp;
 
-    handle_alsu_column(&microIns, &ALSUOp);
+        handle_alsu_column(&microIns, &ALSUOp);
 
-    // Handle the RF column
-    unsigned int ReadRegister1 = 0, ReadRegister2 = 0, RegWrite = 0;
-    enum MemToRegSel MemToRegSel;
-    enum RegDstSel RegDstSel;
+        // Handle the RF column
+        unsigned int ReadRegister1 = 0, ReadRegister2 = 0, RegWrite = 0;
+        enum MemToRegSel MemToRegSel;
+        enum RegDstSel RegDstSel;
 
-    handle_rf_column(&microIns, &ReadRegister1, &ReadRegister2, &RegWrite,
-                     &RegDstSel, &MemToRegSel);
+        handle_rf_column(&microIns, &ReadRegister1, &ReadRegister2, &RegWrite,
+                         &RegDstSel, &MemToRegSel);
 
-    // Handle the MEM column
-    unsigned int MemRead = 0, MemWrite = 0;
-    enum IorDSel IorDSel;
+        // Handle the MEM column
+        unsigned int MemRead = 0, MemWrite = 0;
+        enum IorDSel IorDSel;
 
-    handle_mem_column(&microIns, &MemRead, &MemWrite, &IorDSel);
+        handle_mem_column(&microIns, &MemRead, &MemWrite, &IorDSel);
 
-    // Handle the sequencing column
-    handle_sequencing_column(&microIns);
+        // Handle the sequencing column
+        handle_sequencing_column(&microIns);
 
-    // Increment the CPU clock
-    clock += 1;
+        // Increment the CPU clock
+        clock += 1;
 
-    // Call the units
+        // Call the units
 
-    MemData MemOut = microIns.mem != mMCnothing
-                         ? mem(IorD(IorDSel), MemRead, MemWrite, B)
-                         : EMPTY_MEM_RETURN;
+        MemData MemOut = microIns.mem != mMCnothing
+                             ? mem(IorD(IorDSel), MemRead, MemWrite, B)
+                             : EMPTY_MEM_RETURN;
 
-    struct RegOut RegOut =
-        microIns.rf != mRCnothing
-            ? reg(ReadRegister1, ReadRegister2, RegDst(RegDstSel),
-                  MemToReg(MemToRegSel), RegWrite)
-            : EMPTY_REG_RETURN;
+        struct RegOut RegOut =
+            microIns.rf != mRCnothing
+                ? reg(ReadRegister1, ReadRegister2, RegDst(RegDstSel),
+                      MemToReg(MemToRegSel), RegWrite)
+                : EMPTY_REG_RETURN;
 
-    struct ALUOut ALUOut =
-        microIns.alu != mACnothing
-            ? alu(ALUSrcA(microIns.alu1), ALUSrcB(microIns.alu2), ALUOp)
-            : EMPTY_ALU_RETURN;
+        struct ALUOut ALUOut =
+            microIns.alu != mACnothing
+                ? alu(ALUSrcA(microIns.alu1), ALUSrcB(microIns.alu2), ALUOp)
+                : EMPTY_ALU_RETURN;
 
-    unsigned int ALSUOut = microIns.alsu != mASCnothing
-                               ? alsu(B, ALSUSrcB(microIns.alsu2), ALSUOp)
-                               : EMPTY_ALSU_RETURN;
+        unsigned int ALSUOut = microIns.alsu != mASCnothing
+                                   ? alsu(B, ALSUSrcB(microIns.alsu2), ALSUOp)
+                                   : EMPTY_ALSU_RETURN;
 
-    // Perhaps a bit late, but better than never. Handle the PC column
-    enum PCSrcSel PCSrcSel = PCSrc_C;
+        // Perhaps a bit late, but better than never. Handle the PC column
+        enum PCSrcSel PCSrcSel = PCSrc_C;
 
-    if (microIns.pc == mPWCa)
-      PCSrcSel = PCSrc_A;
-    else if (microIns.pc == mPWCalu_out)
-      PCSrcSel = PCSrc_ALUOut;
-    else if (microIns.pc == mPWCjump_address)
-      PCSrcSel = PCSrc_IRAddr;
+        if (microIns.pc == mPWCa)
+            PCSrcSel = PCSrc_A;
+        else if (microIns.pc == mPWCalu_out)
+            PCSrcSel = PCSrc_ALUOut;
+        else if (microIns.pc == mPWCjump_address)
+            PCSrcSel = PCSrc_IRAddr;
 
-    // Write to PC only if the write signal is enabled OR either the c_cond or
-    // c_not_cond signals are enabled and their conditions is met
-    if (((microIns.pc == mPWCc_cond && ALUOut.Zero) ||
-         (microIns.pc == mPWCc_not_cond && !ALUOut.Zero)) ||
-        microIns.pc != mPWCnothing) {
-      PC = PCSrc(PCSrcSel, ALUOut.Out);
+        // Write to PC only if the write signal is enabled OR either the
+        // c_cond or c_not_cond signals are enabled and their conditions is
+        // met
+        if (((microIns.pc == mPWCc_cond && ALUOut.Zero) ||
+             (microIns.pc == mPWCc_not_cond && !ALUOut.Zero)) ||
+            microIns.pc != mPWCnothing) {
+            PC = PCSrc(PCSrcSel, ALUOut.Out);
+        }
+
+        // Write to registers
+
+        if (microIns.mem == mMCread_a)
+            A = MemOut;
+        else if (microIns.mem == mMCread_b)
+            B = MemOut;
+        else if (microIns.mem == mMCread_pc)
+            DR = IR = MemOut;
+        else if (microIns.mem == mMCread_c)
+            DR = MemOut;
+
+        if (microIns.rf != mRCnothing) {
+            A = RegOut.ReadData1;
+            B = RegOut.ReadData2;
+        }
+
+        if (microIns.alu != mACnothing)
+            C = ALUOut.Out;
+        if (microIns.alsu != mASCnothing)
+            D = ALSUOut;
+
+        // Exit simulation if we received the break instruction
+        if (microIns.exit == mECexit) {
+            break;
+        }
     }
-
-    // Write to registers
-
-    if (microIns.mem == mMCread_a)
-      A = MemOut;
-    else if (microIns.mem == mMCread_b)
-      B = MemOut;
-    else if (microIns.mem == mMCread_pc)
-      DR = IR = MemOut;
-    else if (microIns.mem == mMCread_c)
-      DR = MemOut;
-
-    if (microIns.rf != mRCnothing) {
-      A = RegOut.ReadData1;
-      B = RegOut.ReadData2;
-    }
-
-    if (microIns.alu != mACnothing)
-      C = ALUOut.Out;
-    if (microIns.alsu != mASCnothing)
-      D = ALSUOut;
-
-    // Exit simulation if we received the break instruction
-    if (microIns.exit == mECexit) {
-      break;
-    }
-  }
 }
 
 void handle_sequencing_column(struct Microinstruction *microIns) {
-  switch (microIns->sequencing.kind) {
-  case mSKseq:
-    microPC += 1;
-    break;
-  case mSKlabel:
-    microPC = microIns->sequencing.label;
-    break;
-  case mSKdisp:
-    microPC = opcode_to_microcode_idx(IR_opcode());
-    // Here it seems a good place to handle stats
-    handle_ic_stats();
+    switch (microIns->sequencing.kind) {
+    case mSKseq:
+        microPC += 1;
+        break;
+    case mSKlabel:
+        microPC = microIns->sequencing.label;
+        break;
+    case mSKdisp:
+        microPC = opcode_to_microcode_idx(IR_opcode());
+        // Here it seems a good place to handle stats
+        handle_ic_stats();
 
 #ifdef DEBUG
-    printf("\n");
-    DEBUG_PRINTF("About to process instruction: ");
+        printf("\n");
+        DEBUG_PRINTF("About to process instruction: ");
 
-    // Print the instruction in bits
-    for (int b = 0, l = sizeof(unsigned int) * 8; b < l; ++b) {
-      printf(ANSI_FR "%i", (IR >> (l - b - 1)) & 0x01);
+        // Print the instruction in bits
+        for (int b = 0, l = sizeof(unsigned int) * 8; b < l; ++b) {
+            printf(ANSI_FR "%i", (IR >> (l - b - 1)) & 0x01);
 
-      if (b > 0 && b % 5 == 0 && b < 30)
-        printf(" ");
-    }
+            if (b > 0 && b % 5 == 0 && b < 30)
+                printf(" ");
+        }
 
-    printf("\n" ANSI_0);
+        printf("\n" ANSI_0);
 #endif
 
-    break;
-  }
+        break;
+    }
 }
 
 void handle_alu_column(struct Microinstruction *microIns, enum ALUOp *ALUOp) {
-  if (microIns->alu == mACadd)
-    *ALUOp = ALUOp_Add;
-  else if (microIns->alu == mACsub)
-    *ALUOp = ALUOp_Sub;
-  else if (microIns->alu == mACand)
-    *ALUOp = ALUOp_And;
-  else if (microIns->alu == mACor)
-    *ALUOp = ALUOp_Or;
+    if (microIns->alu == mACadd)
+        *ALUOp = ALUOp_Add;
+    else if (microIns->alu == mACsub)
+        *ALUOp = ALUOp_Sub;
+    else if (microIns->alu == mACand)
+        *ALUOp = ALUOp_And;
+    else if (microIns->alu == mACor)
+        *ALUOp = ALUOp_Or;
 }
 
 void handle_alsu_column(struct Microinstruction *microIns,
                         enum ALSUOp *ALSUOp) {
-  if (microIns->alsu == mASCsll)
-    *ALSUOp = ALSUOp_Sll;
-  else if (microIns->alsu == mASCsrl)
-    *ALSUOp = ALSUOp_Srl;
-  else if (microIns->alsu == mASCsra)
-    *ALSUOp = ALSUOp_Sra;
-  else if (microIns->alsu == mASCror)
-    *ALSUOp = ALSUOp_Ror;
+    if (microIns->alsu == mASCsll)
+        *ALSUOp = ALSUOp_Sll;
+    else if (microIns->alsu == mASCsrl)
+        *ALSUOp = ALSUOp_Srl;
+    else if (microIns->alsu == mASCsra)
+        *ALSUOp = ALSUOp_Sra;
+    else if (microIns->alsu == mASCror)
+        *ALSUOp = ALSUOp_Ror;
 }
 
 void handle_rf_column(struct Microinstruction *microIns,
                       unsigned int *ReadRegister1, unsigned int *ReadRegister2,
                       unsigned int *RegWrite, enum RegDstSel *RegDstSel,
                       enum MemToRegSel *MemToRegSel) {
-  switch (microIns->rf) {
-  case mRCread_rs_rt:
-    *ReadRegister1 = IR_rs();
-    *ReadRegister2 = IR_rt();
-    break;
-  case mRCread_rs_rd:
-    *ReadRegister1 = IR_rs();
-    *ReadRegister2 = IR_rd();
-    break;
-  case mRCwrite_rd_c:
-    *RegDstSel = RegDst_Rd;
-    *MemToRegSel = MemToReg_C;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_rd_d:
-    *RegDstSel = RegDst_Rd;
-    *MemToRegSel = MemToReg_D;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_rt_c:
-    *RegDstSel = RegDst_Rt;
-    *MemToRegSel = MemToReg_C;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_rt_d:
-    *RegDstSel = RegDst_Rt;
-    *MemToRegSel = MemToReg_D;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_rt_dr:
-    *RegDstSel = RegDst_Rt;
-    *MemToRegSel = MemToReg_DR;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_ra_a:
-    *RegDstSel = RegDst_Ra;
-    *MemToRegSel = MemToReg_A;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_ra_b:
-    *RegDstSel = RegDst_Ra;
-    *MemToRegSel = MemToReg_B;
-    *RegWrite = 1;
-    break;
-  case mRCwrite_ra_pc:
-    *RegDstSel = RegDst_Ra;
-    *MemToRegSel = MemToReg_PC;
-    *RegWrite = 1;
-    break;
-  case mRCnothing:
-    break;
-  }
+    switch (microIns->rf) {
+    case mRCread_rs_rt:
+        *ReadRegister1 = IR_rs();
+        *ReadRegister2 = IR_rt();
+        break;
+    case mRCread_rs_rd:
+        *ReadRegister1 = IR_rs();
+        *ReadRegister2 = IR_rd();
+        break;
+    case mRCwrite_rd_c:
+        *RegDstSel = RegDst_Rd;
+        *MemToRegSel = MemToReg_C;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_rd_d:
+        *RegDstSel = RegDst_Rd;
+        *MemToRegSel = MemToReg_D;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_rt_c:
+        *RegDstSel = RegDst_Rt;
+        *MemToRegSel = MemToReg_C;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_rt_d:
+        *RegDstSel = RegDst_Rt;
+        *MemToRegSel = MemToReg_D;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_rt_dr:
+        *RegDstSel = RegDst_Rt;
+        *MemToRegSel = MemToReg_DR;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_ra_a:
+        *RegDstSel = RegDst_Ra;
+        *MemToRegSel = MemToReg_A;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_ra_b:
+        *RegDstSel = RegDst_Ra;
+        *MemToRegSel = MemToReg_B;
+        *RegWrite = 1;
+        break;
+    case mRCwrite_ra_pc:
+        *RegDstSel = RegDst_Ra;
+        *MemToRegSel = MemToReg_PC;
+        *RegWrite = 1;
+        break;
+    case mRCnothing:
+        break;
+    }
 }
 
 void handle_mem_column(struct Microinstruction *microIns, unsigned int *MemRead,
                        unsigned int *MemWrite, enum IorDSel *IorDSel) {
-  switch (microIns->mem) {
-  case mMCread_pc:
-    *MemRead = 1;
-    *IorDSel = IorD_PC;
-    break;
-  case mMCread_c:
-    *MemRead = 1;
-    *IorDSel = IorD_C;
-    break;
-  case mMCwrite_c:
-    *MemWrite = 1;
-    *IorDSel = IorD_C;
-    break;
-  case mMCread_a:
-    *MemRead = 1;
-    *IorDSel = IorD_A;
-    break;
-  case mMCread_b:
-    *MemRead = 1;
-    *IorDSel = IorD_B;
-    break;
-  case mMCnothing:
-    break;
-  }
+    switch (microIns->mem) {
+    case mMCread_pc:
+        *MemRead = 1;
+        *IorDSel = IorD_PC;
+        break;
+    case mMCread_c:
+        *MemRead = 1;
+        *IorDSel = IorD_C;
+        break;
+    case mMCwrite_c:
+        *MemWrite = 1;
+        *IorDSel = IorD_C;
+        break;
+    case mMCread_a:
+        *MemRead = 1;
+        *IorDSel = IorD_A;
+        break;
+    case mMCread_b:
+        *MemRead = 1;
+        *IorDSel = IorD_B;
+        break;
+    case mMCnothing:
+        break;
+    }
 }

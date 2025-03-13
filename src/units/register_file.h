@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 struct RegOut {
-  int ReadData1, ReadData2;
+    int ReadData1, ReadData2;
 };
 
 struct RegOut reg(unsigned int ReadRegister1, unsigned int ReadRegister2,

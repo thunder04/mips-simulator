@@ -12,7 +12,7 @@
 #define MEM_START_OF_SP MEM_MAX_DATA_SPACE
 
 #define MEM_SIZE                                                               \
-  (MEM_RESERVED_SPACE + MEM_MAX_PROGRAM_SIZE + MEM_MAX_DATA_SPACE)
+    (MEM_RESERVED_SPACE + MEM_MAX_PROGRAM_SIZE + MEM_MAX_DATA_SPACE)
 
 typedef int MemData;
 

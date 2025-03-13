@@ -18,16 +18,16 @@
 // A helper macro that implements the sign extend function for the immediate
 // field (of 16 bits) of IR.
 // Explanation: If the 16th bit (15 if counting from 0) (the sign) is 1, then
-// fill the rest of the integer with 1s by ORing a mask of 16 bits, moved to the
-// MSB with imm itself. Otherwise, leave it as it is.
+// fill the rest of the integer with 1s by ORing a mask of 16 bits, moved to
+// the MSB with imm itself. Otherwise, leave it as it is.
 #define IMM_SIGN_EXTEND(imm)                                                   \
-  (((imm) >> 15) == 1 ? (MASK(16) << 16) | (imm) : (imm))
+    (((imm) >> 15) == 1 ? (MASK(16) << 16) | (imm) : (imm))
 
 #ifdef DEBUG
 #define DEBUG_PRINTF(format, ...)                                              \
-  printf(ANSI_FM "[DEBUG] " ANSI_0 format, ##__VA_ARGS__)
+    printf(ANSI_FM "[DEBUG] " ANSI_0 format, ##__VA_ARGS__)
 #else
 #define DEBUG_PRINTF(...)                                                      \
-  do {                                                                         \
-  } while (0)
+    do {                                                                       \
+    } while (0)
 #endif

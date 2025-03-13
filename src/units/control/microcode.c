@@ -225,22 +225,22 @@ static int OPCODE_JUMP_TABLE[JUMP_TABLE_SIZE] = {
     [0b111111] = 107, // andmi
 };
 
-// Translates an opcode to the index/label of the implemented instruction in the
-// MICROCODE
+// Translates an opcode to the index/label of the implemented instruction in
+// the MICROCODE
 int opcode_to_microcode_idx(int opcode) {
-  if (opcode >= JUMP_TABLE_SIZE) {
-    printf("opcode exceeds %d.\n", JUMP_TABLE_SIZE);
-    exit(EXIT_FAILURE);
-  }
+    if (opcode >= JUMP_TABLE_SIZE) {
+        printf("opcode exceeds %d.\n", JUMP_TABLE_SIZE);
+        exit(EXIT_FAILURE);
+    }
 
-  int microcode_idx = OPCODE_JUMP_TABLE[opcode];
+    int microcode_idx = OPCODE_JUMP_TABLE[opcode];
 
-  if (microcode_idx < 1) {
-    printf("Unimplemented opcode %d\n", opcode);
-    exit(EXIT_FAILURE);
-  }
+    if (microcode_idx < 1) {
+        printf("Unimplemented opcode %d\n", opcode);
+        exit(EXIT_FAILURE);
+    }
 
-  return microcode_idx;
+    return microcode_idx;
 }
 
 #pragma clang diagnostic pop

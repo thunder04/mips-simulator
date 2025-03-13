@@ -1,55 +1,55 @@
 #pragma once
 
 enum IorDSel {
-  IorD_PC,
-  IorD_A,
-  IorD_B,
-  IorD_C,
+    IorD_PC,
+    IorD_A,
+    IorD_B,
+    IorD_C,
 };
 
 enum MemToRegSel {
-  MemToReg_A,
-  MemToReg_B,
-  MemToReg_C,
-  MemToReg_D,
-  MemToReg_DR,
-  MemToReg_PC,
+    MemToReg_A,
+    MemToReg_B,
+    MemToReg_C,
+    MemToReg_D,
+    MemToReg_DR,
+    MemToReg_PC,
 };
 
 enum RegDstSel {
-  // Write to register rt
-  RegDst_Rt,
-  // Write to register rd
-  RegDst_Rd,
-  // Write to register $ra
-  RegDst_Ra,
+    // Write to register rt
+    RegDst_Rt,
+    // Write to register rd
+    RegDst_Rd,
+    // Write to register $ra
+    RegDst_Ra,
 };
 
 enum ALUSrcASel {
-  ALUSrcA_PC,
-  ALUSrcA_A,
-  ALUSrcA_B,
+    ALUSrcA_PC,
+    ALUSrcA_A,
+    ALUSrcA_B,
 };
 
 enum ALUSrcBSel {
-  ALUSrcB_B,
-  ALUSrcB_4,
-  ALUSrcB_SignExtend,
-  ALUSrcB_SignExtendSll2,
-  ALUSrcB_D,
-  ALUSrcB_DR,
+    ALUSrcB_B,
+    ALUSrcB_4,
+    ALUSrcB_SignExtend,
+    ALUSrcB_SignExtendSll2,
+    ALUSrcB_D,
+    ALUSrcB_DR,
 };
 
 enum ALSUSrcBSel {
-  ALSUSrcB_A,
-  ALSUSrcB_Shamt,
+    ALSUSrcB_A,
+    ALSUSrcB_Shamt,
 };
 
 enum PCSrcSel {
-  PCSrc_ALUOut,
-  PCSrc_A,
-  PCSrc_C,
-  PCSrc_IRAddr,
+    PCSrc_ALUOut,
+    PCSrc_A,
+    PCSrc_C,
+    PCSrc_IRAddr,
 };
 
 unsigned int IorD(enum IorDSel sel);

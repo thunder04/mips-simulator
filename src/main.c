@@ -6,7 +6,6 @@
 #include "units/control/stats.h"
 #include "units/memory.h"
 #include "units/register_file.h"
-#include "utils.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,85 +18,88 @@ void parse_file(FILE *fptr);
 void write_stats_file(FILE *fstatsptr);
 
 int main(int argc, char *argv[]) {
-  if (argc < 3) {
-    printf("Usage: %s <object-file-path> <stats-file>\n", argv[0]);
-    return 1;
-  }
+    if (argc < 3) {
+        printf("Usage: %s <object-file-path> <stats-file>\n", argv[0]);
 
-  FILE *fptr = fopen(argv[1], "r");
-  FILE *fstatsptr = fopen(argv[2], "w");
+        return 1;
+    }
 
-  if (fptr == NULL) {
-    printf("Failed to open the pseudo-object file for reading: %s\n",
-           strerror(errno));
-    return EXIT_FAILURE;
-  }
+    FILE *fptr = fopen(argv[1], "r");
+    FILE *fstatsptr = fopen(argv[2], "w");
 
-  if (fstatsptr == NULL) {
-    printf("Failed to open the stats file for writing: %s\n", strerror(errno));
-    return EXIT_FAILURE;
-  }
+    if (fptr == NULL) {
+        printf("Failed to open the pseudo-object file for reading: %s\n",
+               strerror(errno));
+        return EXIT_FAILURE;
+    }
 
-  // Initialize the $sp register
-  reg(0, 0, 29, MEM_START_OF_SP, 1);
+    if (fstatsptr == NULL) {
+        printf("Failed to open the stats file for writing: %s\n",
+               strerror(errno));
+        return EXIT_FAILURE;
+    }
 
-  // Parse and close the file as it's not needed anymore
-  parse_file(fptr);
-  fclose(fptr);
+    // Initialize the $sp register
+    reg(0, 0, 29, MEM_START_OF_SP, 1);
 
-  // Run the Control unit, which, for simplicity reasons, will also use (call)
-  // the rest of the units. Something like running an event loop
-  DEBUG_PRINTF(ANSI_FG "=== Starting simulation ===\n" ANSI_0);
-  control();
-  DEBUG_PRINTF(ANSI_FG "=== Ending simulation ===\n\n" ANSI_0);
+    // Parse and close the file as it's not needed anymore
+    parse_file(fptr);
+    fclose(fptr);
 
-  printf("CPI for the program: %u\n", calculate_cpi());
+    // Run the Control unit, which, for simplicity reasons, will also use
+    // (call) the rest of the units. Something like running an event loop
+    DEBUG_PRINTF(ANSI_FG "=== Starting simulation ===\n" ANSI_0);
+    control();
+    DEBUG_PRINTF(ANSI_FG "=== Ending simulation ===\n\n" ANSI_0);
 
-  // Write to the stats file
-  write_stats_file(fstatsptr);
-  fclose(fstatsptr);
+    printf("CPI for the program: %u\n", calculate_cpi());
 
-  printf("Stats are written in \"%s\"\n", argv[2]);
+    // Write to the stats file
+    write_stats_file(fstatsptr);
+    fclose(fstatsptr);
 
-  return 0;
+    printf("Stats are written in \"%s\"\n", argv[2]);
+
+    return 0;
 }
 
 void parse_file(FILE *fptr) {
-  // Get file's size
-  fseek(fptr, 0, SEEK_END);
-  long flen = ftell(fptr);
-  fseek(fptr, 0, SEEK_SET);
+    // Get file's size
+    fseek(fptr, 0, SEEK_END);
+    long flen = ftell(fptr);
+    fseek(fptr, 0, SEEK_SET);
 
-  if (flen > MEM_MAX_PROGRAM_SIZE) {
-    printf("The file exceeds %d bytes\n", MEM_MAX_PROGRAM_SIZE);
-    exit(4);
-  }
-
-  char buf[LINE_LIMIT];
-  unsigned int addr = PC;
-
-  while (fgets(buf, LINE_LIMIT, fptr)) {
-    char *endptr;
-    unsigned int word = (unsigned int)strtol(buf, &endptr, 2);
-
-    // If string parsing didn't stop at the end...
-    if ((*endptr != '\0' && *endptr != '\n' && *endptr != '\r') ||
-        // ...or the string was empty, skip this line
-        (buf == endptr)) {
-      DEBUG_PRINTF("Skipping line \"%s\"\n", buf);
-
-      continue;
+    if (flen > MEM_MAX_PROGRAM_SIZE) {
+        printf("The file exceeds %d bytes\n", MEM_MAX_PROGRAM_SIZE);
+        exit(4);
     }
 
-    mem(addr, 0, 1, word);
-    addr += 4;
-  }
+    char buf[LINE_LIMIT];
+    unsigned int addr = PC;
+
+    while (fgets(buf, LINE_LIMIT, fptr)) {
+        char *endptr;
+        unsigned int word = (unsigned int)strtol(buf, &endptr, 2);
+
+        if (
+            // If string parsing didn't stop at the end...
+            (*endptr != '\0' && *endptr != '\n' && *endptr != '\r')
+            // ...or the string was empty, skip this line.
+            || (buf == endptr)) {
+            DEBUG_PRINTF("Skipping line \"%s\"\n", buf);
+
+            continue;
+        }
+
+        mem(addr, 0, 1, word);
+        addr += 4;
+    }
 }
 
 void write_stats_file(FILE *fstatsptr) {
-  fprintf(fstatsptr, "===== Stats =====\n");
-  fprintf(fstatsptr, "CPI = %d\nclock = %d\n", calculate_cpi(), clock);
+    fprintf(fstatsptr, "===== Stats =====\n");
+    fprintf(fstatsptr, "CPI = %d\nclock = %d\n", calculate_cpi(), clock);
 
-  write_reg_stats_section(fstatsptr);
-  write_mem_stats_section(fstatsptr);
+    write_reg_stats_section(fstatsptr);
+    write_mem_stats_section(fstatsptr);
 }

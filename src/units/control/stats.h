@@ -1,16 +1,16 @@
 #pragma once
 
 enum InstructionCategory {
-  ICalu,
-  ICalsu,
-  ICalu_alsu,
-  ICmem,
-  ICmem_alu,
-  ICcond_jump,
-  ICjump,
-  ICbreak,
-  // Keep this to the end
-  InstructionCategoryLen
+    ICalu,
+    ICalsu,
+    ICalu_alsu,
+    ICmem,
+    ICmem_alu,
+    ICcond_jump,
+    ICjump,
+    ICbreak,
+    // Keep this to the end
+    InstructionCategoryLen
 };
 
 extern const int CYCLES_PER_INSTRUCTION_CATEGORY[InstructionCategoryLen];

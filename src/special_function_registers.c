@@ -1,5 +1,4 @@
 #include "macros.h"
-#include "memory.h"
 #include "units/memory.h"
 
 unsigned int A = 0, B = 0, C = 0, D = 0, DR = 0, IR = 0;
